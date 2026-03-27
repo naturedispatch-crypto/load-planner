@@ -13,14 +13,3399 @@
   --gold-light: #e8c96a;
   --gold-dark: #b08a2e;
   --green: #2ecc71;
-  --green-bg: rgba(46, 199, 113, 0.1);
-  --accent-red: #3ÇF2;
-  --accent-blue: #300FF0;
-  --text-dark: #333333;
-  --text-light: #666666;
-  --text-muted: #999999;
-  --border-color: #dddddd;
-  --table-hover: rkga(128, 128, 128, 0.1);
-  --modal-bg: rgba(0, 0, 0, 0.5);
+  --green-bg: rgba(46,204,113,0.12);
+  --yellow: #f1c40f;
+  --yellow-bg: rgba(241,196,15,0.12);
+  --red: #e74c3c;
+  --red-bg: rgba(231,76,60,0.12);
+  --gray: #7f8c8d;
+  --gray-bg: rgba(127,140,141,0.12);
+  --blue: #3498db;
+  --blue-bg: rgba(52,152,219,0.12);
+  --orange: #e67e22;
+  --orange-bg: rgba(230,126,34,0.12);
+  --text: #e8e8e8;
+  --text-dim: #9aa3b0;
+  --border: rgba(212,168,67,0.15);
+  --card-bg: #132039;
+  --input-bg: #1a2d4f;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--navy); color: var(--text); min-height: 100vh; }
+
+.header { background: var(--navy-light); border-bottom: 2px solid var(--gold); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo { font-size: 22px; font-weight: 700; color: var(--gold); letter-spacing: 0.5px; }
+.logo span { color: var(--text); font-weight: 400; font-size: 14px; margin-left: 8px; }
+.company-toggle { display: flex; background: var(--navy); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.company-btn { padding: 8px 16px; border: none; background: none; color: var(--text-dim); cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+.company-btn.active { background: var(--gold); color: var(--navy); }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.clock { color: var(--text-dim); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.nav { display: flex; background: var(--navy-light); border-bottom: 1px solid var(--border); padding: 0 24px; gap: 4px; overflow-x: auto; }
+.nav-tab { padding: 12px 20px; border: none; background: none; color: var(--text-dim); cursor: pointer; font-size: 13px; font-weight: 500; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+.nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.nav-tab:hover { color: var(--text); }
+.nav-tab .badge { background: var(--gold); color: var(--navy); font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 6px; font-weight: 700; }
+
+.main { padding: 20px 24px; max-width: 1600px; margin: 0 auto; }
+.page { display: none; }
+.page.active { display: block; }
+
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.section-title { font-size: 18px; font-weight: 600; color: var(--gold); }
+.section-subtitle { font-size: 13px; color: var(--text-dim); }
+.section-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Planning Panels — Today / Tomorrow */
+.planning-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.planning-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.planning-panel.today { border-top: 3px solid var(--gold); }
+.planning-panel.tomorrow { border-top: 3px solid var(--blue); }
+.panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.panel-title { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.panel-title.today-title { color: var(--gold); }
+.panel-title.tomorrow-title { color: var(--blue); }
+.panel-date { font-size: 12px; color: var(--text-dim); }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stat-card { background: var(--navy); border: 1px solid var(--border); border-radius: 10px; padding: 14px 10px; text-align: center; }
+.stat-value { font-size: 26px; font-weight: 700; }
+.stat-label { font-size: 10px; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.3; }
+.stat-green .stat-value { color: var(--green); }
+.stat-yellow .stat-value { color: var(--yellow); }
+.stat-red .stat-value { color: var(--red); }
+.stat-blue .stat-value { color: var(--blue); }
+.stat-orange .stat-value { color: var(--orange); }
+@media (max-width: 768px) { .planning-row { grid-template-columns: 1fr; } }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; position: relative; transition: all 0.2s; }
+.card:hover { border-color: var(--gold); transform: translateY(-1px); }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.card-title { font-size: 15px; font-weight: 600; }
+.card-subtitle { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+.badge-status { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.badge-available { background: var(--green-bg); color: var(--green); }
+.badge-onload { background: var(--yellow-bg); color: var(--yellow); }
+.badge-rest { background: var(--orange-bg); color: var(--orange); }
+.badge-timeoff { background: var(--blue-bg); color: var(--blue); }
+.badge-active { background: var(--green-bg); color: var(--green); }
+.badge-repair { background: var(--red-bg); color: var(--red); }
+.badge-pending { background: var(--yellow-bg); color: var(--yellow); }
+.badge-confirmed { background: var(--blue-bg); color: var(--blue); }
+.badge-intransit { background: var(--orange-bg); color: var(--orange); }
+.badge-delivered { background: var(--green-bg); color: var(--green); }
+.badge-onboarding { background: rgba(155,89,182,0.15); color: #9b59b6; }
+.badge-waiting { background: rgba(231,76,60,0.12); color: #e67e22; }
+td[onclick] .badge-status { transition: filter 0.15s; }
+td[onclick]:hover .badge-status { filter: brightness(1.3); }
+.dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.dot-green { background: var(--green); }
+.dot-yellow { background: var(--yellow); }
+.dot-red { background: var(--red); }
+.dot-orange { background: var(--orange); }
+.dot-blue { background: var(--blue); }
+.dot-purple { background: #9b59b6; }
+.dot-waiting { background: #e67e22; }
+
+.drop-zone { border: 2px dashed var(--border); border-radius: 12px; padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.3s; background: var(--navy); margin-bottom: 16px; }
+.drop-zone:hover { border-color: var(--gold); background: rgba(212,168,67,0.05); }
+.drop-zone.dragover { border-color: var(--gold); background: rgba(212,168,67,0.1); transform: scale(1.01); }
+.drop-zone .drop-icon { font-size: 36px; margin-bottom: 8px; }
+.drop-zone .drop-text { color: var(--gold); font-size: 15px; font-weight: 600; }
+.drop-zone .drop-hint { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
+.drop-zone .drop-or { color: var(--text-dim); font-size: 12px; margin: 8px 0; }
+.drop-zone .drop-btn { display: inline-block; padding: 8px 20px; background: var(--gold); color: var(--navy); border-radius: 6px; font-weight: 600; font-size: 13px; }
+/* Gmail Integration */
+.gmail-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+.gmail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+.gmail-title { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: var(--text); }
+.gmail-logo { width: 24px; height: 24px; }
+.gmail-status { font-size: 12px; padding: 4px 10px; border-radius: 6px; font-weight: 600; }
+.gmail-status.connected { background: var(--green-bg); color: var(--green); }
+.gmail-status.disconnected { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+.gmail-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.gmail-setup { background: var(--navy); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 10px; }
+.gmail-setup summary { cursor: pointer; color: var(--gold); font-size: 13px; font-weight: 600; }
+.gmail-setup .setup-steps { margin-top: 10px; font-size: 12px; color: var(--text-dim); line-height: 1.7; }
+.gmail-setup .setup-steps code { background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 3px; color: var(--gold); font-size: 11px; }
+.gmail-setup input { background: var(--navy-mid); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; width: 100%; font-size: 13px; margin-top: 8px; }
+.gmail-results { margin-top: 12px; }
+.gmail-email-item { background: var(--navy); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gmail-email-info { flex: 1; min-width: 0; }
+.gmail-email-subject { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gmail-email-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.gmail-email-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.batch-queue { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.batch-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; }
+.batch-item .batch-name { font-weight: 600; font-size: 13px; }
+.batch-item .batch-status { font-size: 12px; }
+
+.driver-info { display: flex; flex-direction: column; gap: 6px; }
+.info-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+.info-label { color: var(--text-dim); font-size: 12px; }
+.info-value { font-weight: 500; font-size: 13px; text-align: right; max-width: 60%; }
+
+/* Current Load Box */
+.current-load-box { background: var(--navy); border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--yellow); margin-top: 4px; }
+.current-load-box .load-route { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.current-load-box .load-meta { font-size: 12px; color: var(--text-dim); }
+.current-load-box .load-meta strong { color: var(--gold); }
+.eta-line { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.eta-badge { background: var(--orange-bg); color: var(--orange); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+
+/* Availability Bar */
+.availability-bar { margin-top: 6px; padding: 10px 12px; background: var(--navy); border-radius: 8px; border-left: 3px solid var(--green); }
+.availability-bar.rest { border-left-color: var(--orange); }
+.availability-bar.off { border-left-color: var(--blue); }
+.availability-bar.onload { border-left-color: var(--yellow); }
+.avail-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
+.avail-detail { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+.avail-detail strong { color: var(--text); }
+
+/* Next-Day Planning */
+.next-day-box { background: rgba(52,152,219,0.08); border: 1px solid rgba(52,152,219,0.2); border-radius: 8px; padding: 8px 12px; margin-top: 6px; }
+.next-day-box .nd-title { font-size: 11px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 3px; }
+.next-day-box .nd-detail { font-size: 12px; color: var(--text-dim); }
+.next-day-box .nd-detail strong { color: var(--text); }
+
+.load-type-tags { display: flex; gap: 6px; margin-top: 6px; }
+.load-tag { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.load-tag.local { background: rgba(46,204,113,0.15); color: var(--green); }
+.load-tag.regional { background: rgba(52,152,219,0.15); color: var(--blue); }
+.load-tag.none { background: rgba(231,76,60,0.15); color: var(--red); }
+
+/* Day-Grouped Driver Rows */
+.day-group { margin-bottom: 20px; }
+.day-header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--navy-light); border: 1px solid var(--border); border-radius: 10px 10px 0 0; }
+.day-header .day-name { font-size: 16px; font-weight: 700; color: var(--gold); }
+.day-header .day-date { font-size: 13px; color: var(--text-dim); }
+.day-header .day-count { margin-left: auto; background: var(--gold); color: var(--navy); padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+.day-header.today-header { border-color: var(--green); border-left: 4px solid var(--green); }
+.day-header.tomorrow-header { border-color: var(--blue); border-left: 4px solid var(--blue); }
+.day-header.day-after-header { border-color: var(--orange); border-left: 4px solid var(--orange); }
+.day-header.off-header { border-color: var(--red); border-left: 4px solid var(--red); }
+.day-drivers { border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; overflow: hidden; }
+.driver-row { display: flex; align-items: center; gap: 16px; padding: 12px 16px; background: var(--card-bg); border-bottom: 1px solid var(--border); transition: background 0.15s; }
+.driver-row:last-child { border-bottom: none; }
+.driver-row:hover { background: rgba(212,168,67,0.04); }
+.driver-row .dr-name { font-size: 14px; font-weight: 600; min-width: 110px; }
+.driver-row .dr-truck { font-size: 12px; color: var(--text-dim); min-width: 80px; }
+.driver-row .dr-badge { flex-shrink: 0; }
+.driver-row .dr-load { flex: 1; font-size: 12px; color: var(--text-dim); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.driver-row .dr-load strong { color: var(--text); }
+.driver-row .dr-avail { font-size: 12px; font-weight: 600; min-width: 140px; text-align: right; }
+.driver-row .dr-tags { display: flex; gap: 4px; flex-shrink: 0; }
+.day-empty { padding: 16px; text-align: center; color: var(--text-dim); font-size: 13px; background: var(--card-bg); border-bottom: none; }
+
+.btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.btn-primary { background: var(--gold); color: var(--navy); }
+.btn-primary:hover { background: var(--gold-light); }
+.btn-secondary { background: var(--navy-mid); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--gold); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+.btn-danger { background: var(--red-bg); color: var(--red); }
+.btn-danger:hover { background: rgba(231,76,60,0.25); }
+.btn-success { background: var(--green-bg); color: var(--green); border: 1px solid rgba(46,204,113,0.3); }
+
+.table-wrap { overflow-x: auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--navy-mid); color: var(--gold); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; padding: 12px 14px; text-align: left; white-space: nowrap; position: sticky; top: 0; }
+td { padding: 10px 14px; border-top: 1px solid var(--border); font-size: 13px; white-space: nowrap; }
+tr:hover td { background: rgba(212,168,67,0.04); }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--navy-light); border: 1px solid var(--gold); border-radius: 16px; padding: 24px; width: 90%; max-width: 520px; max-height: 85vh; overflow-y: auto; }
+.modal-title { font-size: 18px; font-weight: 600; color: var(--gold); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.modal-close { background: none; border: none; color: var(--text-dim); font-size: 22px; cursor: pointer; padding: 4px 8px; }
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.3px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 14px; outline: none; transition: border 0.2s; }
+.form-group input:focus, .form-group select:focus { border-color: var(--gold); }
+.form-group select option { background: var(--navy-mid); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Onboarding table */
+.onboard-table td { vertical-align: middle; }
+.onboard-table .actions-cell { display: flex; gap: 6px; }
+
+@media (max-width: 768px) {
+  .header { flex-direction: column; gap: 10px; padding: 10px 16px; }
+  .header-left, .header-right { width: 100%; justify-content: center; flex-wrap: wrap; }
+  .main { padding: 14px 12px; }
+  .grid { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: repeat(3, 1fr); }
+  .nav { padding: 0 12px; }
+  .nav-tab { padding: 10px 12px; font-size: 12px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
 }
 
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.rest-countdown { animation: pulse 2s ease-in-out infinite; color: var(--orange); font-weight: 600; font-size: 12px; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--navy); }
+::-webkit-scrollbar-thumb { background: var(--navy-mid); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo">NATURE DISPATCH<span>Load Planner</span></div>
+    <div class="company-toggle">
+      <button class="company-btn active" onclick="switchCompany('all')">Total Fleet</button>
+      <button class="company-btn" onclick="switchCompany('nature')">Nature Dispatch</button>
+      <button class="company-btn" onclick="switchCompany('ysa')">YSA Transport</button>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="clock" id="clock"></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-tab active" onclick="switchPage('drivers')">Drivers & Availability</button>
+  <button class="nav-tab" onclick="switchPage('loads')">Load Board <span class="badge" id="loadBadge">0</span></button>
+  <button class="nav-tab" onclick="switchPage('submit')">Submit Load</button>
+  <button class="nav-tab" onclick="switchPage('dashboard')">Dashboard</button>
+  <button class="nav-tab" onclick="switchPage('trucks')">Fleet Status</button>
+  <button class="nav-tab" onclick="switchPage('locations')">Shippers & Receivers</button>
+  <button class="nav-tab" onclick="switchPage('manage')">Manage Fleet</button>
+</div>
+
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page" id="page-dashboard">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Weekly Revenue Dashboard</div>
+        <div class="section-subtitle">Saturday to Friday — Rate per load per driver</div>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-secondary btn-sm" onclick="shiftWeek(-1)">← Prev Week</button>
+        <span id="weekLabel" style="color:var(--gold);font-weight:600;font-size:14px;padding:0 8px;"></span>
+        <button class="btn btn-secondary btn-sm" onclick="shiftWeek(1)">Next Week →</button>
+      </div>
+    </div>
+    <div class="table-wrap" style="overflow-x:auto;">
+      <table id="revenueTable"></table>
+    </div>
+    <div id="revenueSummary" style="margin-top:16px;"></div>
+  </div>
+
+  <!-- DRIVERS -->
+  <div class="page active" id="page-drivers">
+    <div class="planning-row" id="planningRow"></div>
+    <div class="section-header">
+      <div>
+        <div class="section-title">Drivers & Availability Board</div>
+        <div class="section-subtitle">Grouped by day — see who's available now, tomorrow, and the day after</div>
+      </div>
+    </div>
+    <div id="driverDayGroups"></div>
+  </div>
+
+  <!-- TRUCKS -->
+  <div class="page" id="page-trucks">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Fleet Status</div>
+        <div class="section-subtitle">Full fleet overview — click any status to update it</div>
+      </div>
+      <div class="section-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" onclick="openModal('driverStatus')">Update Driver Status</button>
+        <button class="btn btn-primary" onclick="openModal('truckStatus')">Update Truck Status</button>
+      </div>
+    </div>
+    <div id="fleetSummary" style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;"></div>
+    <div id="truckGrid"></div>
+  </div>
+
+  <!-- LOADS -->
+  <div class="page" id="page-loads">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Load Board</div>
+        <div class="section-subtitle">Matches your dispatch sheet — all loads by date</div>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-secondary btn-sm" onclick="showAllLoads=!showAllLoads;renderLoads();" id="loadHistoryToggle">Show All</button>
+        <label class="btn btn-secondary" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+          <span style="font-size:16px;">&#128196;</span> Upload Rate Con (PDF)
+          <input type="file" accept=".pdf" id="rateConUpload" multiple onchange="handleMultiPdfUpload(event, 'board')" style="display:none;">
+        </label>
+        <button class="btn btn-primary" onclick="openModal('newLoad')">+ New Load</button>
+      </div>
+    </div>
+    <div id="uploadStatusBoard" style="display:none;margin-bottom:12px;padding:10px 16px;border-radius:8px;font-size:13px;"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="min-width:80px;">Actions</th><th id="companyHeader" style="display:none;">Company</th><th>Date</th><th>PRO #</th><th>Driver</th><th>Trailer</th>
+          <th>Shipper Location</th><th>Pickup Time</th><th>Arrive Shipper</th><th>Depart Shipper</th>
+          <th>Delivery Location</th><th>Stops</th><th>Del. Date</th><th>Del. Time</th><th>Arrival Time</th><th>Departure Time</th>
+          <th>Comments</th><th>Rate</th><th>Status</th><th style="min-width:70px;">Tracking</th><th style="min-width:80px;">Confirmed</th>
+        </tr></thead>
+        <tbody id="loadsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SUBMIT LOAD -->
+  <div class="page" id="page-submit">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Submit a Load</div>
+        <div class="section-subtitle">Create a new load assignment or request</div>
+      </div>
+    </div>
+    <!-- Gmail Integration Panel -->
+    <div class="gmail-panel" id="gmailPanel">
+      <div class="gmail-header">
+        <div class="gmail-title">
+          <svg class="gmail-logo" viewBox="0 0 24 24" fill="none"><path d="M20.5 4h-17A1.5 1.5 0 002 5.5v13A1.5 1.5 0 003.5 20h17a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0020.5 4z" fill="#EA4335" opacity="0.15"/><path d="M22 6L12 13 2 6" stroke="#EA4335" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="4" width="20" height="16" rx="2" stroke="#EA4335" stroke-width="1.5" fill="none"/></svg>
+          Gmail — Rate Con Auto-Import
+          <span class="gmail-status disconnected" id="gmailStatusBadge">Not Connected</span>
+        </div>
+        <div class="gmail-actions">
+          <button class="btn btn-primary btn-sm" id="gmailConnectBtn" onclick="gmailConnect()" style="background:#EA4335;border-color:#EA4335;">Connect Gmail</button>
+          <button class="btn btn-secondary btn-sm" id="gmailCheckBtn" onclick="gmailCheckEmails()" style="display:none;">Check for Rate Cons</button>
+          <button class="btn btn-secondary btn-sm" id="gmailDisconnectBtn" onclick="gmailDisconnect()" style="display:none;">Disconnect</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px;">
+        Connects to <strong style="color:var(--gold);">naturedispatch@gmail.com</strong> and auto-pulls PDF rate confirmations from <strong style="color:var(--gold);">asheffield@bsttrucking.com</strong>.
+      </div>
+      <div id="gmailResults" class="gmail-results" style="display:none;"></div>
+      <div class="gmail-setup" id="gmailSetup">
+        <details>
+          <summary>First-time setup — Google Cloud credentials (takes 3 minutes)</summary>
+          <div class="setup-steps">
+            <p><strong style="color:var(--text);">Sign in with naturedispatch@gmail.com for all steps below:</strong></p>
+            <p>1. Go to <strong><a href="https://console.cloud.google.com" target="_blank" style="color:var(--gold);">console.cloud.google.com</a></strong> and create a new project (e.g., "ND Load Planner")</p>
+            <p>2. Go to <strong>APIs & Services → Library</strong>, search for <code>Gmail API</code> and <strong>Enable</strong> it</p>
+            <p>3. Go to <strong>APIs & Services → Credentials</strong> → click <strong>+ Create Credentials → OAuth client ID</strong></p>
+            <p>4. If prompted, configure the <strong>OAuth consent screen</strong>: choose <code>External</code>, fill in app name, use <code>naturedispatch@gmail.com</code> as the contact email, and save. Add <code>naturedispatch@gmail.com</code> as a <strong>Test user</strong>.</p>
+            <p>5. Back in Credentials → Create OAuth client ID: Application type = <code>Web application</code></p>
+            <p>6. Under <strong>Authorized JavaScript origins</strong>, add the URL where you open this app (e.g., <code>http://localhost</code> or your domain). If opening as a file, add <code>http://localhost</code>.</p>
+            <p>7. Copy the <strong>Client ID</strong> and paste it below:</p>
+            <input type="text" id="gmailClientId" placeholder="Paste your Google Client ID here (e.g., 123456789.apps.googleusercontent.com)" value="309284541968-njq9tpmr5tvm2gusff45c29d7ehofmbe.apps.googleusercontent.com" oninput="saveGmailClientId(this.value)">
+            <div style="margin-top:6px;font-size:11px;color:var(--text-dim);">Your Client ID is saved locally and never shared.</div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Drag & Drop Zone -->
+    <div class="drop-zone" id="submitDropZone" onclick="document.getElementById('rateConUpload2').click();">
+      <div class="drop-icon">📄</div>
+      <div class="drop-text">Drag & Drop Rate Con PDFs Here</div>
+      <div class="drop-hint">Drop one or multiple PDFs — each will create a separate load</div>
+      <div class="drop-or">— or —</div>
+      <div class="drop-btn">Browse Files</div>
+      <input type="file" accept=".pdf" id="rateConUpload2" multiple onchange="handleMultiPdfUpload(event, 'submit')" style="display:none;">
+    </div>
+    <div class="batch-queue" id="batchQueue" style="display:none;"></div>
+    <div id="uploadStatus" style="display:none;margin-bottom:12px;padding:10px 16px;border-radius:8px;font-size:13px;"></div>
+    <div class="modal" style="display:block; max-width: 620px;">
+      <div class="form-row">
+        <div class="form-group"><label>Assign to Company</label>
+          <select id="submitCompany" onchange="populateDriverSelects()">
+            <option value="nature">Nature Dispatch</option>
+            <option value="ysa">YSA Transport</option>
+          </select>
+        </div>
+        <div class="form-group"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Date</label><input type="date" id="submitDate"></div>
+        <div class="form-group"><label>PRO #</label><input type="text" id="submitLoadId" placeholder="e.g. 1091500"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Driver</label><select id="submitDriver"></select></div>
+        <div class="form-group"><label>Trailer #</label><input type="text" id="submitTrailer" placeholder="e.g. 51920"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Shipper Location</label><input type="text" id="submitPickupLoc" placeholder="City, State"></div>
+        <div class="form-group"><label>Pickup Time</label><input type="text" id="submitPickupTime" placeholder="e.g. 18:00 or 8-1500"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Arrive Shipper</label><input type="text" id="submitArriveShipper" placeholder="e.g. 1615"></div>
+        <div class="form-group"><label>Depart Shipper</label><input type="text" id="submitDepartShipper" placeholder="e.g. 1720"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Delivery Location</label><input type="text" id="submitDeliveryLoc" placeholder="City, State"></div>
+        <div class="form-group"><label>Delivery Date</label><input type="date" id="submitDeliveryDate"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Delivery Time</label><input type="text" id="submitDeliveryTime" placeholder="e.g. 8:00 or 07-1500"></div>
+        <div class="form-group"><label>Arrival Time</label><input type="text" id="submitArrivalTime" placeholder="e.g. 1700"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Departure Time</label><input type="text" id="submitDepartureTime" placeholder="e.g. 1815"></div>
+        <div class="form-group"><label>Rate ($)</label><input type="number" id="submitRate" placeholder="e.g. 1200"></div>
+      </div>
+      <div style="background:var(--navy-mid);border-radius:8px;padding:14px 16px;border:1px solid var(--border);margin-bottom:16px;">
+        <div style="font-size:12px;text-transform:uppercase;color:var(--gold);font-weight:600;letter-spacing:0.5px;margin-bottom:10px;">Tracking</div>
+        <div class="form-row">
+          <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="submitTrackingRequired" onchange="document.getElementById('submitTrackingConfirmed').disabled=!this.checked;if(!this.checked) document.getElementById('submitTrackingConfirmed').checked=false;"> Tracking Required</label></div>
+          <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="submitTrackingConfirmed" disabled> Tracking Confirmed</label></div>
+        </div>
+      </div>
+      <div class="form-group"><label>Comments</label><textarea id="submitNotes" rows="3" placeholder="Trailer swap info, special instructions..."></textarea></div>
+      <button class="btn btn-primary" onclick="submitLoad()" style="width:100%; padding:12px; font-size:15px;">Submit Load</button>
+    </div>
+  </div>
+
+  <!-- MANAGE FLEET (Onboarding) -->
+  <div class="page" id="page-locations">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Shippers & Receivers Directory</div>
+        <div class="section-subtitle">Store location info, hours, instructions — auto-matched from rate con uploads</div>
+      </div>
+      <div class="section-actions">
+        <input type="text" id="locationSearch" placeholder="Search by name or city..." oninput="renderLocations()" style="background:var(--input-bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px;width:200px;">
+        <button class="btn btn-primary" onclick="openModal('addLocation')">+ Add Location</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="onboard-table">
+        <thead><tr>
+          <th style="width:70px;">Type</th><th>Name</th><th>City, State</th><th>Hours</th><th style="width:80px;">Drop & Hook</th><th style="width:90px;">Use Date</th><th style="max-width:250px;">Comments</th><th style="width:130px;">Actions</th>
+        </tr></thead>
+        <tbody id="locationsTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="page" id="page-manage">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Manage Fleet — Driver & Truck Onboarding</div>
+        <div class="section-subtitle">Add, edit, or remove drivers and trucks</div>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-primary" onclick="openModal('addDriver')">+ Add Driver</button>
+        <button class="btn btn-secondary" onclick="openModal('addTruck')">+ Add Truck</button>
+      </div>
+    </div>
+
+    <div class="section-title" style="font-size:15px; margin-bottom:10px;">Drivers</div>
+    <div class="table-wrap" style="margin-bottom:24px;">
+      <table class="onboard-table">
+        <thead><tr><th>#</th><th>Name</th><th>Truck #</th><th>Phone</th><th>Company</th><th>Actions</th></tr></thead>
+        <tbody id="manageDriversTable"></tbody>
+      </table>
+    </div>
+
+    <div class="section-title" style="font-size:15px; margin-bottom:10px;">Trucks</div>
+    <div class="table-wrap">
+      <table class="onboard-table">
+        <thead><tr><th>Truck #</th><th>Assigned Driver</th><th>Status</th><th>Notes</th><th>Actions</th></tr></thead>
+        <tbody id="manageTrucksTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODALS -->
+
+<!-- Update Driver Status -->
+<div class="modal-overlay" id="modal-driverStatus">
+  <div class="modal">
+    <div class="modal-title">Update Driver Status <button class="modal-close" onclick="closeModal('driverStatus')">&times;</button></div>
+    <div class="form-group"><label>Select Driver</label><select id="modalDriver" onchange="prefillDriverModal()"></select></div>
+    <div class="form-group"><label>Status</label>
+      <select id="modalDriverStatus" onchange="calcRest()">
+        <option value="available">Available</option>
+        <option value="onload">On Load</option>
+        <option value="rest">10-Hour Rest</option>
+        <option value="timeoff">Time Off Requested</option>
+        <option value="waiting_on_truck">Waiting on Truck</option>
+        <option value="onboarding">Onboarding</option>
+      </select>
+    </div>
+    <div class="form-group" id="restGroup" style="display:none">
+      <label>Last Delivery Completed (Date & Time)</label>
+      <input type="datetime-local" id="modalDeliveryTime" oninput="calcRest()">
+      <div style="font-size:12px; color:var(--orange); margin-top:6px;" id="restCalc"></div>
+    </div>
+    <div class="form-group"><label>Notes</label><input type="text" id="modalDriverNotes" placeholder="Optional notes"></div>
+    <button class="btn btn-primary" onclick="saveDriverStatus()" style="width:100%; padding:12px;">Save Status</button>
+  </div>
+</div>
+
+<!-- Update Truck Status -->
+<div class="modal-overlay" id="modal-truckStatus">
+  <div class="modal">
+    <div class="modal-title">Update Truck Status <button class="modal-close" onclick="closeModal('truckStatus')">&times;</button></div>
+    <div class="form-group"><label>Select Truck</label><select id="modalTruck"></select></div>
+    <div class="form-group"><label>Status</label>
+      <select id="modalTruckStatus"><option value="active">Active</option><option value="repair">In Repair</option><option value="onboarding">Onboarding</option></select>
+    </div>
+    <div class="form-group"><label>Notes (repair details, ETA, etc.)</label><input type="text" id="modalTruckNotes" placeholder="e.g. Brake repair, back by Friday"></div>
+    <button class="btn btn-primary" onclick="saveTruckStatus()" style="width:100%; padding:12px;">Save Status</button>
+  </div>
+</div>
+
+<!-- New Load -->
+<div class="modal-overlay" id="modal-newLoad">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-title">Create New Load <button class="modal-close" onclick="closeModal('newLoad')">&times;</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>Date</label><input type="date" id="modalLoadDate"></div>
+      <div class="form-group"><label>PRO #</label><input type="text" id="modalLoadId" placeholder="e.g. 1091500"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Driver</label><select id="modalLoadDriver"></select></div>
+      <div class="form-group"><label>Trailer #</label><input type="text" id="modalLoadTrailer" placeholder="e.g. 51920"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Shipper Location</label><input type="text" id="modalPickupLoc" placeholder="City, State"></div>
+      <div class="form-group"><label>Pickup Time</label><input type="text" id="modalPickupTime" placeholder="e.g. 18:00 or 8-1500"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Arrive Shipper</label><input type="text" id="modalArriveShipper" placeholder="e.g. 1615"></div>
+      <div class="form-group"><label>Depart Shipper</label><input type="text" id="modalDepartShipper" placeholder="e.g. 1720"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Delivery Location</label><input type="text" id="modalDeliveryLoc" placeholder="City, State"></div>
+      <div class="form-group"><label>Delivery Date</label><input type="date" id="modalDeliveryDate"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Delivery Time</label><input type="text" id="modalDeliveryTime2" placeholder="e.g. 8:00 or 07-1500"></div>
+      <div class="form-group"><label>Arrival Time</label><input type="text" id="modalArrivalTime" placeholder="e.g. 1700"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Departure Time</label><input type="text" id="modalDepartureTime" placeholder="e.g. 1815"></div>
+      <div class="form-group"><label>Rate ($)</label><input type="number" id="modalRate" placeholder="1200"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="modalTrackingRequired"> Tracking Required</label></div>
+      <div class="form-group"><label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="modalTrackingConfirmed"> Tracking Confirmed</label></div>
+    </div>
+    <div class="form-group"><label>Comments</label><textarea id="modalLoadNotes" rows="2" placeholder="Trailer swap info, special instructions..."></textarea></div>
+    <button class="btn btn-primary" onclick="saveNewLoad()" style="width:100%; padding:12px;">Create Load</button>
+  </div>
+</div>
+
+<!-- Edit Load Modal -->
+<div class="modal-overlay" id="modal-editLoad">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-title">Edit Load <button class="modal-close" onclick="closeModal('editLoad')">&times;</button></div>
+    <input type="hidden" id="editLoadIdx">
+    <div class="form-row">
+      <div class="form-group"><label>Date</label><input type="date" id="editLoadDate"></div>
+      <div class="form-group"><label>PRO #</label><input type="text" id="editLoadId"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Driver</label><select id="editLoadDriver"></select></div>
+      <div class="form-group"><label>Trailer #</label><input type="text" id="editLoadTrailer"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Shipper Location</label><input type="text" id="editPickupLoc"></div>
+      <div class="form-group"><label>Pickup Time</label><input type="text" id="editPickupTime" placeholder="e.g. 18:00"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Arrive Shipper</label><input type="text" id="editArriveShipper" placeholder="e.g. 1615"></div>
+      <div class="form-group"><label>Depart Shipper</label><input type="text" id="editDepartShipper" placeholder="e.g. 1720"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Delivery Location</label><input type="text" id="editDeliveryLoc"></div>
+      <div class="form-group"><label>Delivery Date</label><input type="date" id="editDeliveryDate"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Delivery Time</label><input type="text" id="editDeliveryTime" placeholder="e.g. 8:00"></div>
+      <div class="form-group"><label>Arrival Time</label><input type="text" id="editArrivalTime" placeholder="e.g. 1700"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Departure Time</label><input type="text" id="editDepartureTime" placeholder="e.g. 1815"></div>
+      <div class="form-group"><label>Rate ($)</label><input type="number" id="editRate"></div>
+    </div>
+    <div class="form-group"><label>Status</label>
+      <select id="editLoadStatus">
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="intransit">In Transit</option>
+        <option value="delivered">Delivered</option>
+      </select>
+    </div>
+    <div style="background:var(--navy-mid);border-radius:8px;padding:14px 16px;border:1px solid var(--border);margin-bottom:16px;">
+      <div style="font-size:12px;text-transform:uppercase;color:var(--gold);font-weight:600;letter-spacing:0.5px;margin-bottom:12px;">Tracking</div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;white-space:nowrap;"><input type="checkbox" id="editTrackingRequired" style="width:18px;height:18px;flex-shrink:0;" onchange="document.getElementById('editTrackingConfirmed').disabled=!this.checked;if(!this.checked) document.getElementById('editTrackingConfirmed').checked=false;"> Tracking Required</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;white-space:nowrap;"><input type="checkbox" id="editTrackingConfirmed" style="width:18px;height:18px;flex-shrink:0;" disabled> Tracking Confirmed</label>
+      </div>
+    </div>
+    <div class="form-group"><label>Comments</label><textarea id="editLoadNotes" rows="2"></textarea></div>
+    <div class="form-row" style="align-items:center;">
+      <div class="form-group" style="flex:1;">
+        <label>Rate Con PDF</label>
+        <div id="editPdfStatus" style="font-size:12px;color:var(--text-dim);margin-top:4px;"></div>
+      </div>
+      <label class="btn btn-secondary btn-sm" style="cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:8px;">
+        <span>&#128196;</span> Attach PDF
+        <input type="file" accept=".pdf" id="editPdfUpload" onchange="attachPdfToEdit(event)" style="display:none;">
+      </label>
+    </div>
+    <button class="btn btn-primary" onclick="saveEditLoad()" style="width:100%; padding:12px;">Save Changes</button>
+  </div>
+</div>
+
+<!-- Add Driver Modal -->
+<div class="modal-overlay" id="modal-addDriver">
+  <div class="modal">
+    <div class="modal-title">Add New Driver <button class="modal-close" onclick="closeModal('addDriver')">&times;</button></div>
+    <div class="form-group"><label>Driver Name</label><input type="text" id="addDriverName" placeholder="Full name"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Truck #</label><input type="text" id="addDriverTruck" placeholder="e.g. 1430"></div>
+      <div class="form-group"><label>Phone</label><input type="text" id="addDriverPhone" placeholder="(614)555-1234"></div>
+    </div>
+    <div class="form-group"><label>Company</label>
+      <select id="addDriverCompany"><option value="nature">Nature Dispatch</option><option value="ysa">YSA Transport</option></select>
+    </div>
+    <button class="btn btn-primary" onclick="addDriver()" style="width:100%; padding:12px;">Add Driver</button>
+  </div>
+</div>
+
+<!-- Edit Driver Modal -->
+<div class="modal-overlay" id="modal-editDriver">
+  <div class="modal">
+    <div class="modal-title">Edit Driver <button class="modal-close" onclick="closeModal('editDriver')">&times;</button></div>
+    <input type="hidden" id="editDriverId">
+    <input type="hidden" id="editDriverCompany">
+    <div class="form-group"><label>Driver Name</label><input type="text" id="editDriverName"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Truck #</label><input type="text" id="editDriverTruck"></div>
+      <div class="form-group"><label>Phone</label><input type="text" id="editDriverPhone"></div>
+    </div>
+    <button class="btn btn-primary" onclick="saveEditDriver()" style="width:100%; padding:12px;">Save Changes</button>
+  </div>
+</div>
+
+<!-- Add Truck Modal -->
+<div class="modal-overlay" id="modal-addTruck">
+  <div class="modal">
+    <div class="modal-title">Add New Truck <button class="modal-close" onclick="closeModal('addTruck')">&times;</button></div>
+    <div class="form-row">
+      <div class="form-group"><label>Truck #</label><input type="text" id="addTruckNumber" placeholder="e.g. 1430"></div>
+      <div class="form-group"><label>Company</label>
+        <select id="addTruckCompany"><option value="nature">Nature Dispatch</option><option value="ysa">YSA Transport</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Status</label>
+        <select id="addTruckStatus"><option value="active">Active</option><option value="repair">In Repair</option><option value="onboarding">Onboarding</option></select>
+      </div>
+      <div class="form-group"><label>Notes</label><input type="text" id="addTruckNotes" placeholder="Optional notes"></div>
+    </div>
+    <button class="btn btn-primary" onclick="addTruck()" style="width:100%; padding:12px;">Add Truck</button>
+  </div>
+</div>
+
+<!-- Add/Edit Location -->
+<div class="modal-overlay" id="modal-addLocation">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-title"><span id="locationModalTitle">Add Location</span> <button class="modal-close" onclick="closeModal('addLocation')">&times;</button></div>
+    <input type="hidden" id="locEditIdx" value="-1">
+    <div class="form-row">
+      <div class="form-group"><label>Type</label>
+        <select id="locType">
+          <option value="shipper">Shipper</option>
+          <option value="receiver">Receiver</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Facility Name</label><input type="text" id="locName" placeholder="e.g. ROK BROS, G-COR"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>City</label><input type="text" id="locCity" placeholder="e.g. Columbus"></div>
+      <div class="form-group"><label>State</label><input type="text" id="locState" placeholder="e.g. OH" maxlength="2" style="text-transform:uppercase;"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Address (optional)</label><input type="text" id="locAddress" placeholder="e.g. 2100 Refugee Rd"></div>
+      <div class="form-group"><label>Phone (optional)</label><input type="text" id="locPhone" placeholder="e.g. (614)443-6735"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Hours of Operation</label><input type="text" id="locHours" placeholder="e.g. Mon-Fri 6:00 AM - 5:00 PM"></div>
+      <div class="form-group"><label>Closes At</label><input type="text" id="locCloses" placeholder="e.g. 5:00 PM, Sat 12:00 PM"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Drop & Hook?</label>
+        <select id="locDropHook">
+          <option value="">Unknown</option>
+          <option value="yes">Yes — Drop & Hook</option>
+          <option value="no">No — Live Load/Unload</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Avg Wait Time</label><input type="text" id="locWaitTime" placeholder="e.g. 1-2 hours, 30 min"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Use Date From</label>
+        <select id="locUseDate">
+          <option value="">Default (Pickup Date)</option>
+          <option value="delivery">Delivery Date — driver works on delivery day</option>
+          <option value="pickup">Pickup Date — driver works on pickup day</option>
+        </select>
+      </div>
+      <div class="form-group" style="flex:1;">
+        <label style="color:var(--text-dim);font-size:11px;line-height:1.4;">This controls which date the Dashboard & Availability use.<br>BST-VOLVO = delivery date (preloaded), LACKS TRIM = pickup date (straight through).</label>
+      </div>
+    </div>
+    <div class="form-group"><label>Comments</label><textarea id="locInstructions" rows="3" placeholder="e.g. Check in at guard shack, no food grade trailers, lumper required, hours info..." style="width:100%;background:var(--input-bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px;resize:vertical;"></textarea></div>
+    <div class="form-group"><label>Additional Notes</label><textarea id="locNotes" rows="2" placeholder="Any other info for the team or driver..." style="width:100%;background:var(--input-bg);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px;resize:vertical;"></textarea></div>
+    <button class="btn btn-primary" onclick="saveLocation()" style="width:100%; padding:12px;">Save Location</button>
+  </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+// ===== DEFAULT DATA =====
+const DEFAULT_COMPANIES = {
+  nature: {
+    name: 'Nature Dispatch',
+    drivers: [
+      { id: 'mo', name: 'Mo', truck: '2', phone: '(614)597-8356' },
+      { id: 'yusuf', name: 'Yusuf', truck: '3', phone: '(614)615-6365' },
+      { id: 'aziz', name: 'Aziz', truck: '4', phone: '614-502-9994' },
+      { id: 'mokhtar', name: 'Mokhtar', truck: '5', phone: '(267)622-9547' },
+      { id: 'yassine', name: 'Yassine', truck: '6', phone: '614-549-2633' },
+      { id: 'ali', name: 'Ali', truck: '7', phone: '603-333-4560' },
+      { id: 'mervin', name: 'Mervin', truck: '1410', phone: '937-477-8124' },
+      { id: 'hamsa', name: 'Hamsa', truck: '1421', phone: '(614)374-6535' },
+      { id: 'larry', name: 'Larry', truck: '1424', phone: '' },
+      { id: 'oussama', name: 'Oussama', truck: '1425', phone: '614-531-6864' },
+      { id: 'yaser', name: 'Yaser', truck: '2019', phone: '' },
+      { id: 'salhi', name: 'Salhi', truck: '1426', phone: '' }
+    ]
+  },
+  ysa: {
+    name: 'YSA Transport',
+    drivers: [
+      { id: 'younes', name: 'Younes', truck: '1702', phone: '614-615-6789' },
+      { id: 'yaseer', name: 'Yaseer', truck: '1802', phone: '(614)741-9200' }
+    ]
+  }
+};
+
+// ===== STATE =====
+let currentCompany = 'all';
+let currentPage = 'drivers';
+let showAllLoads = false;
+
+function getState() {
+  const saved = localStorage.getItem('nd_state_v3');
+  if (saved) {
+    const s = JSON.parse(saved);
+    // Ensure companies exist
+    if (!s.companies) s.companies = JSON.parse(JSON.stringify(DEFAULT_COMPANIES));
+    if (!s.locations) s.locations = [];
+    return s;
+  }
+  const s = {
+    companies: JSON.parse(JSON.stringify(DEFAULT_COMPANIES)),
+    driverStatus: {},
+    truckStatus: {},
+    loads: [],
+    locations: []
+  };
+  for (const [coKey, co] of Object.entries(s.companies)) {
+    for (const d of co.drivers) {
+      s.driverStatus[d.id] = { status: 'available', lastDelivery: null, notes: '' };
+      s.truckStatus[d.truck] = { status: 'active', notes: '', company: coKey };
+    }
+  }
+  return s;
+}
+
+let state = getState();
+
+// Migration: backfill company on truckStatus entries that don't have one
+// Migration: backfill company on trucks and fix loads with invalid company
+(function migrateData() {
+  // Build driver ID -> company map and truck -> company map
+  const driverToCompany = {};
+  const truckToCompany = {};
+  for (const [co, data] of Object.entries(state.companies)) {
+    for (const d of data.drivers) {
+      driverToCompany[d.id] = co;
+      truckToCompany[d.truck] = co;
+    }
+  }
+  let changed = false;
+
+  // Fix truckStatus missing company
+  for (const [num, ts] of Object.entries(state.truckStatus)) {
+    if (!ts.company) {
+      ts.company = truckToCompany[num] || 'nature';
+      changed = true;
+    }
+  }
+
+  // Fix loads with invalid company (e.g. 'all' or missing)
+  for (const load of state.loads) {
+    if (!load.company || load.company === 'all' || (load.company !== 'nature' && load.company !== 'ysa')) {
+      // Determine correct company from the assigned driver
+      if (load.driverId && driverToCompany[load.driverId]) {
+        load.company = driverToCompany[load.driverId];
+      } else {
+        load.company = 'nature'; // default
+      }
+      changed = true;
+    }
+  }
+
+  if (changed) localStorage.setItem('nd_state_v3', JSON.stringify(state));
+})();
+
+function saveState() { localStorage.setItem('nd_state_v3', JSON.stringify(state)); }
+
+// ===== UTILITIES =====
+function formatTime(dt) {
+  if (!dt) return '—';
+  const d = new Date(dt);
+  return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+}
+function formatTimeShort(dt) {
+  if (!dt) return '—';
+  const d = new Date(dt);
+  return d.toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
+}
+function getAvailableAfter(dt) {
+  if (!dt) return null;
+  return new Date(new Date(dt).getTime() + 10 * 3600000);
+}
+function getRestRemaining(dt) {
+  if (!dt) return null;
+  const diff = getAvailableAfter(dt) - new Date();
+  return diff > 0 ? diff : 0;
+}
+function formatDuration(ms) {
+  if (ms <= 0) return 'Now';
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
+// Parse delivery date + time text into a Date (best effort)
+// Handles formats like "8:00", "18:00", "07-1500", "1700", "6:00:00 AM 09:00"
+function parseLoadDateTime(dateStr, timeStr) {
+  if (!dateStr && !timeStr) return null;
+  let d = dateStr ? new Date(dateStr + 'T12:00:00') : new Date();
+  if (!timeStr) return d;
+  // Try "HH:MM" or "H:MM"
+  let m = timeStr.match(/^(\d{1,2}):(\d{2})$/);
+  if (m) { d.setHours(parseInt(m[1]), parseInt(m[2]), 0); return d; }
+  // Try military "HHMM" like "1700"
+  m = timeStr.match(/^(\d{2})(\d{2})$/);
+  if (m) { d.setHours(parseInt(m[1]), parseInt(m[2]), 0); return d; }
+  // Try range "HH-HHMM" like "07-1500" — use end time
+  m = timeStr.match(/(\d{1,2})[:-](\d{2,4})$/);
+  if (m) {
+    const end = m[2];
+    if (end.length === 4) { d.setHours(parseInt(end.slice(0,2)), parseInt(end.slice(2)), 0); }
+    else { d.setHours(parseInt(m[1]), parseInt(end), 0); }
+    return d;
+  }
+  // Try "H:MM:SS AM/PM"
+  m = timeStr.match(/(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)/i);
+  if (m) {
+    let h = parseInt(m[1]);
+    if (m[4].toUpperCase() === 'PM' && h < 12) h += 12;
+    if (m[4].toUpperCase() === 'AM' && h === 12) h = 0;
+    d.setHours(h, parseInt(m[2]), 0);
+    return d;
+  }
+  return null;
+}
+
+function getCompanyDrivers() {
+  if (currentCompany === 'all') return getAllDrivers();
+  return (state.companies[currentCompany] || { drivers: [] }).drivers;
+}
+function getAllDrivers() {
+  let all = [];
+  for (const [co, data] of Object.entries(state.companies)) {
+    for (const d of data.drivers) all.push({ ...d, company: co });
+  }
+  return all;
+}
+
+// Find current active load for a driver
+function getActiveLoad(driverId) {
+  return state.loads.find(l =>
+    l.driverId === driverId &&
+    (l.status === 'intransit' || l.status === 'confirmed')
+  ) || null;
+}
+
+// Calculate driver availability considering current load ETA + 10hr rest
+function getDriverAvailability(driverId) {
+  const ds = state.driverStatus[driverId];
+  if (!ds) return { status: 'available', canWorkEarly: true, canWork: true, loadType: 'any' };
+
+  if (ds.status === 'timeoff') return { status: 'timeoff', canWorkEarly: false, canWork: false, loadType: 'none' };
+  if (ds.status === 'waiting_on_truck') return { status: 'waiting_on_truck', canWorkEarly: false, canWork: false, loadType: 'none' };
+  if (ds.status === 'onboarding') return { status: 'onboarding', canWorkEarly: false, canWork: false, loadType: 'none' };
+
+  if (ds.status === 'onload') {
+    const load = getActiveLoad(driverId);
+    let projectedAvail = null;
+    let deliveryETA = null;
+    if (load) {
+      deliveryETA = parseLoadDateTime(load.deliveryDate, load.deliveryTime);
+      if (deliveryETA) projectedAvail = getAvailableAfter(deliveryETA);
+    }
+    return { status: 'onload', canWorkEarly: false, canWork: false, loadType: 'none', activeLoad: load, projectedAvail, deliveryETA };
+  }
+
+  if (ds.status === 'rest' && ds.lastDelivery) {
+    const remaining = getRestRemaining(ds.lastDelivery);
+    const availAt = getAvailableAfter(ds.lastDelivery);
+    if (remaining > 0) {
+      const h = availAt.getHours();
+      const canWorkEarly = h < 7;
+      const canWorkMorning = h < 12;
+      const canWorkEvening = h < 18;
+      let loadType = 'none';
+      if (canWorkMorning) loadType = 'any';
+      else if (canWorkEvening) loadType = 'local';
+      return { status: 'rest', remaining, availAt, canWorkEarly, canWork: canWorkEvening, loadType };
+    }
+    return { status: 'available', canWorkEarly: true, canWork: true, loadType: 'any' };
+  }
+
+  return { status: 'available', canWorkEarly: true, canWork: true, loadType: 'any' };
+}
+
+// ===== RENDER =====
+function renderStats() {
+  const drivers = getCompanyDrivers();
+  const now = new Date();
+  const todayStr = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  const tomorrow = new Date(now); tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowStr = tomorrow.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  const tomorrowStart = new Date(tomorrow); tomorrowStart.setHours(0,0,0,0);
+  const tomorrow7am = new Date(tomorrow); tomorrow7am.setHours(7,0,0,0);
+  const tomorrowEnd = new Date(tomorrow); tomorrowEnd.setHours(23,59,59,0);
+
+  // TODAY stats
+  let todayWorking = 0, todayOff = 0, todayAvailable = 0;
+  // TOMORROW stats
+  let tmrwAvailable = 0, tmrwEarlyAM = 0, trucksRepair = 0;
+
+  for (const d of drivers) {
+    const a = getDriverAvailability(d.id);
+    const ts = state.truckStatus[d.truck];
+    if (ts && ts.status === 'repair') trucksRepair++;
+
+    // --- TODAY ---
+    if (a.status === 'onload') todayWorking++;
+    else if (a.status === 'timeoff' || a.status === 'onboarding' || a.status === 'waiting_on_truck') todayOff++;
+    else if (a.status === 'rest' && a.remaining > 0) {
+      // Resting but might become available today
+      if (a.availAt <= tomorrowStart) todayAvailable++;
+      else todayOff++; // won't be available today
+    }
+    else if (a.status === 'available') todayAvailable++;
+
+    // --- TOMORROW ---
+    if (a.status === 'timeoff' || a.status === 'onboarding' || a.status === 'waiting_on_truck') {
+      // stays off / onboarding / waiting on truck — not available
+    } else if (a.status === 'available') {
+      tmrwAvailable++;
+      tmrwEarlyAM++;
+    } else if (a.status === 'rest') {
+      if (a.availAt && a.availAt <= tomorrowEnd) {
+        tmrwAvailable++;
+        if (a.availAt <= tomorrow7am) tmrwEarlyAM++;
+      }
+    } else if (a.status === 'onload') {
+      // Use projected availability from load ETA + 10hr
+      if (a.projectedAvail) {
+        if (a.projectedAvail <= tomorrowEnd) {
+          tmrwAvailable++;
+          if (a.projectedAvail <= tomorrow7am) tmrwEarlyAM++;
+        }
+      } else {
+        // No ETA — assume they'll be available tomorrow
+        tmrwAvailable++;
+      }
+    }
+  }
+
+  document.getElementById('planningRow').innerHTML = `
+    <div class="planning-panel today">
+      <div class="panel-header">
+        <div class="panel-title today-title">Today</div>
+        <div class="panel-date">${todayStr}</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card stat-yellow"><div class="stat-value">${todayWorking}</div><div class="stat-label">Currently Working</div></div>
+        <div class="stat-card stat-green"><div class="stat-value">${todayAvailable}</div><div class="stat-label">Available Now</div></div>
+        <div class="stat-card stat-blue"><div class="stat-value">${todayOff}</div><div class="stat-label">Off / Resting</div></div>
+      </div>
+    </div>
+    <div class="planning-panel tomorrow">
+      <div class="panel-header">
+        <div class="panel-title tomorrow-title">Tomorrow</div>
+        <div class="panel-date">${tomorrowStr}</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card stat-green"><div class="stat-value">${tmrwAvailable}</div><div class="stat-label">Available</div></div>
+        <div class="stat-card stat-green"><div class="stat-value">${tmrwEarlyAM}</div><div class="stat-label">Early AM Start</div></div>
+        <div class="stat-card stat-red"><div class="stat-value">${trucksRepair}</div><div class="stat-label">Trucks in Repair</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderDriverCard(d) {
+  const ds = state.driverStatus[d.id] || {};
+  const avail = getDriverAvailability(d.id);
+  const ts = state.truckStatus[d.truck] || {};
+  const now = new Date();
+  const tomorrow7am = new Date(now); tomorrow7am.setDate(tomorrow7am.getDate() + 1); tomorrow7am.setHours(7,0,0,0);
+
+  // Determine the smart availability label for the badge
+  let badgeClass = '', badgeLabel = '', dotClass = '';
+  let availabilityTime = null; // the exact time they become available
+
+  if (avail.status === 'onboarding') {
+    badgeClass = 'badge-onboarding'; badgeLabel = 'Onboarding'; dotClass = 'dot-purple';
+  } else if (avail.status === 'waiting_on_truck') {
+    badgeClass = 'badge-waiting'; badgeLabel = 'Waiting on Truck'; dotClass = 'dot-waiting';
+  } else if (avail.status === 'timeoff') {
+    badgeClass = 'badge-timeoff'; badgeLabel = 'Time Off'; dotClass = 'dot-blue';
+  } else if (avail.status === 'onload') {
+    badgeClass = 'badge-onload'; badgeLabel = 'On Load'; dotClass = 'dot-yellow';
+    if (avail.projectedAvail) availabilityTime = avail.projectedAvail;
+  } else if (avail.status === 'rest' && avail.remaining > 0) {
+    availabilityTime = avail.availAt;
+    if (avail.availAt <= now) {
+      badgeClass = 'badge-available'; badgeLabel = 'Available Now'; dotClass = 'dot-green';
+    } else if (avail.availAt <= tomorrow7am) {
+      badgeClass = 'badge-available'; badgeLabel = 'Available Early AM'; dotClass = 'dot-green';
+    } else {
+      badgeClass = 'badge-rest'; dotClass = 'dot-orange';
+      badgeLabel = 'Available ' + formatTimeShort(avail.availAt);
+    }
+  } else {
+    // available
+    badgeClass = 'badge-available'; badgeLabel = 'Available Now'; dotClass = 'dot-green';
+  }
+
+  const truckBadge = ts.status === 'repair'
+    ? '<span class="badge-status badge-repair" style="font-size:10px;padding:2px 6px;"><span class="dot dot-red"></span>Repair</span>'
+    : '';
+
+  // Current load section
+  let loadSection = '';
+  if (avail.status === 'onload' && avail.activeLoad) {
+    const load = avail.activeLoad;
+    const etaStr = avail.deliveryETA ? formatTime(avail.deliveryETA) : (load.deliveryTime ? `${load.deliveryDate || ''} ${load.deliveryTime}` : 'TBD');
+    const projAvailStr = avail.projectedAvail ? formatTimeShort(avail.projectedAvail) : 'TBD';
+    const projAvailH = avail.projectedAvail ? avail.projectedAvail.getHours() : null;
+    const isEarlyAM = avail.projectedAvail && avail.projectedAvail <= tomorrow7am;
+    let nextDayType = 'none';
+    if (projAvailH !== null) {
+      if (projAvailH < 12) nextDayType = 'any';
+      else if (projAvailH < 18) nextDayType = 'local';
+    }
+    loadSection = `
+      <div class="current-load-box">
+        <div class="load-route">${load.pickupLoc || '?'} → ${load.deliveryLoc || '?'}</div>
+        <div class="load-meta">PRO# <strong>${load.loadId}</strong> | Trailer <strong>${load.trailer || '—'}</strong></div>
+        <div class="eta-line">
+          <span class="eta-badge">Delivery ETA: ${etaStr}</span>
+        </div>
+      </div>
+      <div class="next-day-box">
+        <div class="nd-title">After 10hr Rest</div>
+        <div class="nd-detail" style="font-size:13px;"><strong style="color:${isEarlyAM ? 'var(--green)' : 'var(--orange)'};">${isEarlyAM ? 'Available Early AM' : 'Available at ' + projAvailStr}</strong></div>
+        <div class="load-type-tags" style="margin-top:4px;">
+          ${nextDayType === 'any' ? '<span class="load-tag local">Local</span><span class="load-tag regional">Regional</span>' : nextDayType === 'local' ? '<span class="load-tag local">Local Only</span>' : '<span class="load-tag none">Unavailable</span>'}
+        </div>
+      </div>`;
+  } else if (avail.status === 'onload') {
+    loadSection = `
+      <div class="current-load-box">
+        <div class="load-route" style="color:var(--text-dim)">On a load — no load details assigned yet</div>
+        <div class="load-meta">Assign a load in the Load Board to see ETA</div>
+      </div>`;
+  }
+
+  // Availability bar for rest / available / timeoff
+  let availBar = '';
+  if (avail.status === 'rest' && avail.remaining > 0) {
+    const availTime = formatTimeShort(avail.availAt);
+    const isEarlyAM = avail.availAt <= tomorrow7am;
+    availBar = `
+      <div class="availability-bar rest">
+        <div class="avail-title rest-countdown">Rest — ${formatDuration(avail.remaining)} remaining</div>
+        <div class="avail-detail" style="font-size:13px;margin-top:4px;">
+          <strong style="color:${isEarlyAM ? 'var(--green)' : 'var(--orange)'};">
+            ${isEarlyAM ? 'Available Early AM Tomorrow' : 'Available at ' + availTime}
+          </strong>
+        </div>
+      </div>`;
+  } else if (avail.status === 'available') {
+    availBar = `
+      <div class="availability-bar">
+        <div class="avail-title" style="color:var(--green);font-size:13px;">Available Now — Ready for any load</div>
+      </div>`;
+  } else if (avail.status === 'timeoff') {
+    availBar = `
+      <div class="availability-bar off">
+        <div class="avail-title" style="color:var(--blue)">Time Off Requested</div>
+        <div class="avail-detail">Not available for loads</div>
+      </div>`;
+  } else if (avail.status === 'onboarding') {
+    availBar = `
+      <div class="availability-bar off">
+        <div class="avail-title" style="color:#9b59b6">Onboarding</div>
+        <div class="avail-detail">Driver in onboarding process</div>
+      </div>`;
+  } else if (avail.status === 'waiting_on_truck') {
+    availBar = `
+      <div class="availability-bar off">
+        <div class="avail-title" style="color:#e67e22">Waiting on Truck</div>
+        <div class="avail-detail">Truck in repair — driver not available</div>
+      </div>`;
+  }
+
+  // Load type tags
+  let loadTags = '';
+  if (avail.status !== 'onload') {
+    if (avail.loadType === 'any') loadTags = '<span class="load-tag local">Local</span><span class="load-tag regional">Regional</span>';
+    else if (avail.loadType === 'local') loadTags = '<span class="load-tag local">Local Only</span>';
+    else if (avail.status !== 'available') loadTags = '<span class="load-tag none">Unavailable</span>';
+    else loadTags = '<span class="load-tag local">Local</span><span class="load-tag regional">Regional</span>';
+  }
+
+  return `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">${d.name}</div>
+          <div class="card-subtitle">Truck #${d.truck} ${truckBadge}</div>
+        </div>
+        <span class="badge-status ${badgeClass}"><span class="dot ${dotClass}"></span>${badgeLabel}</span>
+      </div>
+      <div class="driver-info">
+        ${ds.notes ? `<div class="info-row"><span class="info-label">Notes</span><span class="info-value">${ds.notes}</span></div>` : ''}
+        ${loadSection}
+        ${availBar}
+        ${loadTags ? `<div class="load-type-tags">${loadTags}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+let weekOffset = 0;
+function shiftWeek(dir) { weekOffset += dir; renderDashboard(); }
+
+function getWeekRange(offset) {
+  const now = new Date();
+  // Find last Saturday (or today if Saturday)
+  const day = now.getDay(); // 0=Sun
+  const diffToSat = (day + 1) % 7; // days since last Saturday
+  const saturday = new Date(now);
+  saturday.setDate(now.getDate() - diffToSat + (offset * 7));
+  saturday.setHours(0,0,0,0);
+  const friday = new Date(saturday);
+  friday.setDate(saturday.getDate() + 6);
+  friday.setHours(23,59,59,0);
+  return { start: saturday, end: friday };
+}
+
+function renderDashboard() {
+  const { start, end } = getWeekRange(weekOffset);
+  const dayNames = ['Saturday','Sunday','Monday','Tuesday','Wednesday','Thursday','Friday'];
+
+  // Build array of 7 dates
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    days.push(d);
+  }
+
+  // Week label
+  const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  document.getElementById('weekLabel').textContent = fmt(start) + ' — ' + fmt(end);
+
+  const drivers = getCompanyDrivers();
+
+  // Build header row: Driver + one column per day + TOTAL
+  let headerHtml = '<thead><tr><th style="position:sticky;left:0;z-index:2;background:var(--navy-mid);">Driver</th>';
+  for (const dn of dayNames) {
+    headerHtml += `<th style="text-align:center;border-left:2px solid var(--border);min-width:90px;">${dn}<br><span style="font-weight:400;font-size:10px;text-transform:none;">${fmt(days[dayNames.indexOf(dn)])}</span></th>`;
+  }
+  headerHtml += '<th style="border-left:2px solid var(--gold);text-align:center;">TOTAL</th></tr></thead>';
+
+  // Get loads for this week
+  const weekLoads = state.loads.filter(l => {
+    if (currentCompany !== 'all' && l.company !== currentCompany) return false;
+    const ld = l.date ? new Date(l.date + 'T00:00:00') : null;
+    if (!ld) return false;
+    return ld >= start && ld <= end;
+  });
+
+  // Build body rows - one per driver
+  let bodyHtml = '<tbody>';
+  let dayTotals = new Array(7).fill(0);
+  let driverTotals = {};
+
+  for (const d of drivers) {
+    bodyHtml += `<tr><td style="position:sticky;left:0;z-index:1;background:var(--card-bg);font-weight:600;white-space:nowrap;">${d.name}</td>`;
+    let driverTotal = 0;
+
+    for (let di = 0; di < 7; di++) {
+      const dayDate = days[di];
+      const dayStr = dayDate.toISOString().slice(0,10);
+      const driverDayLoads = weekLoads.filter(l => {
+        if (l.driverId !== d.id && l.driverName !== d.name) return false;
+        const ld = l.date ? new Date(l.date + 'T00:00:00') : null;
+        if (!ld) return false;
+        return ld.toISOString().slice(0,10) === dayStr;
+      });
+
+      // Combined daily total per driver in one clean cell
+      let dayRevenue = 0;
+      const loadDetails = [];
+      for (const load of driverDayLoads) {
+        const rate = parseFloat(load.rate) || 0;
+        dayRevenue += rate;
+        loadDetails.push('PRO# ' + load.loadId + ': $' + rate.toLocaleString() + ' (' + (load.pickupLoc||'?') + ' → ' + (load.deliveryLoc||'?') + ')');
+      }
+      driverTotal += dayRevenue;
+      dayTotals[di] += dayRevenue;
+
+      if (dayRevenue > 0) {
+        const tooltip = loadDetails.join('\\n');
+        const loadCount = driverDayLoads.length;
+        bodyHtml += `<td style="text-align:center;border-left:2px solid var(--border);color:var(--gold);font-weight:600;cursor:help;" title="${tooltip}">$${dayRevenue.toLocaleString()}${loadCount > 1 ? '<br><span style=\\"font-size:9px;font-weight:400;color:var(--text-dim);\\">' + loadCount + ' loads</span>' : ''}</td>`;
+      } else if (driverDayLoads.length > 0) {
+        bodyHtml += `<td style="text-align:center;border-left:2px solid var(--border);color:var(--text-dim);">—</td>`;
+      } else {
+        bodyHtml += `<td style="text-align:center;border-left:2px solid var(--border);"></td>`;
+      }
+    }
+
+    bodyHtml += `<td style="text-align:center;border-left:2px solid var(--gold);font-weight:700;color:${driverTotal > 0 ? 'var(--green)' : 'var(--text-dim)'};">${driverTotal > 0 ? '$' + driverTotal.toLocaleString() : '—'}</td></tr>`;
+    driverTotals[d.id] = driverTotal;
+  }
+
+  // Totals row
+  const grandTotal = dayTotals.reduce((a,b) => a+b, 0);
+  bodyHtml += '<tr style="background:var(--navy-mid);"><td style="position:sticky;left:0;z-index:1;background:var(--navy-mid);font-weight:700;color:var(--gold);">DAILY TOTAL</td>';
+  for (let di = 0; di < 7; di++) {
+    bodyHtml += `<td style="text-align:center;border-left:2px solid var(--border);font-weight:700;color:var(--gold);">${dayTotals[di] > 0 ? '$' + dayTotals[di].toLocaleString() : '—'}</td>`;
+  }
+  bodyHtml += `<td style="text-align:center;border-left:2px solid var(--gold);font-weight:700;color:var(--gold);font-size:15px;">$${grandTotal.toLocaleString()}</td></tr>`;
+  bodyHtml += '</tbody>';
+
+  document.getElementById('revenueTable').innerHTML = headerHtml + bodyHtml;
+
+  // Summary below
+  const activeDrivers = drivers.filter(d => (driverTotals[d.id] || 0) > 0).length;
+  const avgPerTruck = activeDrivers > 0 ? Math.round(grandTotal / drivers.length) : 0;
+  document.getElementById('revenueSummary').innerHTML = `
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px 20px;flex:1;min-width:180px;">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;">Weekly Revenue</div>
+        <div style="font-size:24px;font-weight:700;color:var(--gold);margin-top:4px;">$${grandTotal.toLocaleString()}</div>
+      </div>
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px 20px;flex:1;min-width:180px;">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;">Drivers with Loads</div>
+        <div style="font-size:24px;font-weight:700;color:var(--text);margin-top:4px;">${activeDrivers} / ${drivers.length}</div>
+      </div>
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px 20px;flex:1;min-width:180px;">
+        <div style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;">Avg per Truck (Weekly)</div>
+        <div style="font-size:24px;font-weight:700;color:var(--green);margin-top:4px;">$${avgPerTruck.toLocaleString()}</div>
+      </div>
+    </div>`;
+
+  const loadBadgeCount = currentCompany === 'all' ? state.loads.length : state.loads.filter(l => l.company === currentCompany).length;
+  document.getElementById('loadBadge').textContent = loadBadgeCount;
+}
+
+function renderDrivers() {
+  const drivers = getCompanyDrivers();
+  const now = new Date();
+
+  // Create 7 dates starting from today
+  const dates = [];
+  const dayEndTimes = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() + i);
+    d.setHours(0,0,0,0);
+    dates.push(d);
+    const dayEnd = new Date(d);
+    dayEnd.setHours(23,59,59,0);
+    dayEndTimes.push(dayEnd);
+  }
+
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const headerClasses = ['today-header', 'tomorrow-header', 'day-after-header', 'tomorrow-header', 'day-after-header', 'tomorrow-header', 'day-after-header'];
+
+  // Categorize each driver by which day they're available
+  const buckets = {};
+  for (let i = 0; i < 7; i++) {
+    buckets[i] = [];
+  }
+  buckets.off = [];
+
+  for (const d of drivers) {
+    const avail = getDriverAvailability(d.id);
+    const ds = state.driverStatus[d.id] || {};
+    const ts = state.truckStatus[d.truck] || {};
+
+    const entry = { driver: d, avail, ds, ts };
+
+    if (avail.status === 'timeoff' || avail.status === 'onboarding' || avail.status === 'waiting_on_truck') {
+      buckets.off.push(entry);
+    } else if (avail.status === 'available') {
+      buckets[0].push(entry);
+    } else if (avail.status === 'rest' && avail.availAt) {
+      let placed = false;
+      for (let i = 0; i < 7; i++) {
+        if (avail.availAt <= dayEndTimes[i]) {
+          buckets[i].push(entry);
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) buckets.off.push(entry);
+    } else if (avail.status === 'onload') {
+      if (avail.projectedAvail) {
+        let placed = false;
+        for (let i = 0; i < 7; i++) {
+          if (avail.projectedAvail <= dayEndTimes[i]) {
+            buckets[i].push(entry);
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) buckets.off.push(entry);
+      } else {
+        buckets[0].push(entry);
+      }
+    } else {
+      buckets[0].push(entry);
+    }
+  }
+
+  function renderDriverRow(entry) {
+    const { driver: d, avail, ds, ts } = entry;
+    const tomorrow7am = new Date(now); tomorrow7am.setDate(tomorrow7am.getDate() + 1); tomorrow7am.setHours(7,0,0,0);
+
+    // Badge
+    let badgeClass = '', badgeLabel = '', dotClass = '';
+    if (avail.status === 'timeoff') {
+      badgeClass = 'badge-timeoff'; badgeLabel = 'Time Off'; dotClass = 'dot-blue';
+    } else if (avail.status === 'waiting_on_truck') {
+      badgeClass = 'badge-waiting'; badgeLabel = 'Waiting on Truck'; dotClass = 'dot-waiting';
+    } else if (avail.status === 'onload') {
+      badgeClass = 'badge-onload'; badgeLabel = 'On Load'; dotClass = 'dot-yellow';
+    } else if (avail.status === 'rest' && avail.remaining > 0) {
+      if (avail.availAt <= now) {
+        badgeClass = 'badge-available'; badgeLabel = 'Available Now'; dotClass = 'dot-green';
+      } else if (avail.availAt <= tomorrow7am) {
+        badgeClass = 'badge-available'; badgeLabel = 'Available Early AM'; dotClass = 'dot-green';
+      } else {
+        badgeClass = 'badge-rest'; dotClass = 'dot-orange';
+        badgeLabel = 'Available ' + formatTimeShort(avail.availAt);
+      }
+    } else {
+      badgeClass = 'badge-available'; badgeLabel = 'Available Now'; dotClass = 'dot-green';
+    }
+
+    // Truck repair badge
+    const truckRepair = ts.status === 'repair' ? ' <span style="color:var(--red);font-size:10px;font-weight:600;">(REPAIR)</span>' : '';
+
+    // Current load info
+    let loadInfo = '';
+    if (avail.status === 'onload' && avail.activeLoad) {
+      const load = avail.activeLoad;
+      const etaStr = avail.deliveryETA ? formatTimeShort(avail.deliveryETA) : (load.deliveryTime || 'TBD');
+      const projStr = avail.projectedAvail ? formatTimeShort(avail.projectedAvail) : '—';
+      loadInfo = `<strong>${load.pickupLoc || '?'}</strong> → <strong>${load.deliveryLoc || '?'}</strong> · PRO# ${load.loadId} · ETA: ${etaStr}`;
+    } else if (avail.status === 'rest' && avail.remaining > 0) {
+      loadInfo = `Rest — ${formatDuration(avail.remaining)} remaining`;
+    } else if (avail.status === 'available') {
+      loadInfo = 'Ready for dispatch';
+    } else if (avail.status === 'onload') {
+      loadInfo = 'On load — no details assigned';
+    } else if (avail.status === 'timeoff') {
+      loadInfo = ds.notes || 'Time off requested';
+    } else if (avail.status === 'waiting_on_truck') {
+      loadInfo = ds.notes || 'Waiting on truck — in repair';
+    }
+
+    // Availability time
+    let availTimeStr = '';
+    if (avail.status === 'available') {
+      availTimeStr = '<span style="color:var(--green);">Now</span>';
+    } else if (avail.status === 'rest' && avail.availAt) {
+      availTimeStr = '<span style="color:var(--orange);">' + formatTimeShort(avail.availAt) + '</span>';
+    } else if (avail.status === 'onload' && avail.projectedAvail) {
+      availTimeStr = '<span style="color:var(--orange);">' + formatTimeShort(avail.projectedAvail) + '</span>';
+    } else if (avail.status === 'timeoff') {
+      availTimeStr = '<span style="color:var(--blue);">—</span>';
+    } else if (avail.status === 'waiting_on_truck') {
+      availTimeStr = '<span style="color:#e67e22;">—</span>';
+    } else {
+      availTimeStr = '—';
+    }
+
+    // Load type tags
+    let tags = '';
+    if (avail.status !== 'onload' && avail.status !== 'timeoff') {
+      if (avail.loadType === 'any') tags = '<span class="load-tag local">Local</span><span class="load-tag regional">Regional</span>';
+      else if (avail.loadType === 'local') tags = '<span class="load-tag local">Local Only</span>';
+      else if (avail.status === 'available') tags = '<span class="load-tag local">Local</span><span class="load-tag regional">Regional</span>';
+    }
+
+    return `<div class="driver-row">
+      <div class="dr-name">${d.name}</div>
+      <div class="dr-truck">Truck #${d.truck}${truckRepair}</div>
+      <div class="dr-badge"><span class="badge-status ${badgeClass}"><span class="dot ${dotClass}"></span>${badgeLabel}</span></div>
+      <div class="dr-load">${loadInfo}</div>
+      <div class="dr-avail">${availTimeStr}</div>
+      <div class="dr-tags">${tags}</div>
+    </div>`;
+  }
+
+  function renderDayGroup(dayIndex, title, dateStr, headerClass, entries) {
+    const rows = entries.length
+      ? entries.map(renderDriverRow).join('')
+      : '<div class="day-empty">No drivers available this day</div>';
+    return `<div class="day-group">
+      <div class="day-header ${headerClass}">
+        <span class="day-name">${title}</span>
+        <span class="day-date">${dateStr}</span>
+        <span class="day-count">${entries.length} driver${entries.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="day-drivers">${rows}</div>
+    </div>`;
+  }
+
+  let html = '';
+  const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+  for (let i = 0; i < 7; i++) {
+    const dayName = dayNames[dates[i].getDay()];
+    const dateStr = fmt(dates[i]);
+    const title = i === 0 ? 'Today — ' + dayName : dayName;
+    html += renderDayGroup(i, title, dateStr, headerClasses[i], buckets[i]);
+  }
+
+  if (buckets.off.length) {
+    html += renderDayGroup('off', 'Off / Unavailable', '', 'off-header', buckets.off);
+  }
+
+  document.getElementById('driverDayGroups').innerHTML = html;
+}
+
+// Get all trucks for the current company view (assigned + orphan)
+function getCompanyTrucks() {
+  const drivers = getCompanyDrivers();
+  const trucks = {};
+  // Trucks assigned to drivers in this company
+  for (const d of drivers) trucks[d.truck] = d;
+  // Orphan trucks from truckStatus that belong to this company
+  for (const [num, ts] of Object.entries(state.truckStatus)) {
+    if (trucks[num]) continue; // already have it from a driver
+    if (currentCompany === 'all') {
+      trucks[num] = null; // show all orphans in total fleet
+    } else if (ts.company === currentCompany) {
+      trucks[num] = null; // show orphan if it matches this company
+    }
+  }
+  return trucks;
+}
+
+function renderTrucks() {
+  const trucks = getCompanyTrucks();
+  const drivers = getCompanyDrivers();
+  const entries = Object.entries(trucks);
+
+  // Count stats
+  let activeTrucks = 0, repairTrucks = 0, onboardingTrucks = 0;
+  let activeDrivers = 0, offDrivers = 0, onboardingDrivers = 0, waitingDrivers = 0, onloadDrivers = 0, restingDrivers = 0;
+  for (const [num] of entries) {
+    const ts = state.truckStatus[num] || { status: 'active' };
+    if (ts.status === 'active') activeTrucks++;
+    else if (ts.status === 'repair') repairTrucks++;
+    else if (ts.status === 'onboarding') onboardingTrucks++;
+  }
+  for (const d of drivers) {
+    const ds = state.driverStatus[d.id];
+    if (!ds || ds.status === 'available') activeDrivers++;
+    else if (ds.status === 'onload') { activeDrivers++; onloadDrivers++; }
+    else if (ds.status === 'rest') { activeDrivers++; restingDrivers++; }
+    else if (ds.status === 'onboarding') onboardingDrivers++;
+    else if (ds.status === 'waiting_on_truck') waitingDrivers++;
+    else offDrivers++;
+  }
+  const totalTrucks = entries.length;
+  const totalDrivers = drivers.length;
+
+  // Summary cards
+  const card = (val, label, color) => `<div style="flex:1;min-width:120px;background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px 10px;text-align:center;">
+    <div style="font-size:24px;font-weight:700;color:${color};">${val}</div>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;">${label}</div>
+  </div>`;
+
+  document.getElementById('fleetSummary').innerHTML = `
+    ${card(activeTrucks, 'Active Trucks', 'var(--green)')}
+    ${card(activeDrivers, 'Active Drivers', 'var(--green)')}
+    ${card(onloadDrivers, 'On Load', 'var(--yellow)')}
+    ${card(restingDrivers, 'Resting', 'var(--orange)')}
+    ${card(repairTrucks, 'Trucks in Repair', 'var(--red)')}
+    ${card(waitingDrivers, 'Waiting on Truck', '#e67e22')}
+    ${card(onboardingTrucks + onboardingDrivers, 'Onboarding', '#9b59b6')}
+    ${card(offDrivers, 'Time Off', 'var(--blue)')}
+    ${card(totalTrucks, 'Total Trucks', 'var(--gold)')}
+    ${card(totalDrivers, 'Total Drivers', 'var(--gold)')}
+  `;
+
+  // Badge helpers
+  const truckBadge = (s) => {
+    const map = { active: ['badge-active','dot-green','Active'], repair: ['badge-repair','dot-red','In Repair'], onboarding: ['badge-onboarding','dot-purple','Onboarding'] };
+    const [cls, dot, lbl] = map[s] || map.active;
+    return `<span class="badge-status ${cls}"><span class="dot ${dot}"></span>${lbl}</span>`;
+  };
+  const driverBadge = (d) => {
+    if (!d) return '<span style="color:var(--text-dim);font-size:11px;">—</span>';
+    const ds = state.driverStatus[d.id];
+    const s = ds?.status || 'available';
+    const map = {
+      available: ['badge-available','dot-green','Available'],
+      onload: ['badge-onload','dot-yellow','On Load'],
+      rest: ['badge-rest','dot-orange','Resting'],
+      timeoff: ['badge-timeoff','dot-blue','Time Off'],
+      waiting_on_truck: ['badge-waiting','dot-waiting','Waiting on Truck'],
+      onboarding: ['badge-onboarding','dot-purple','Onboarding']
+    };
+    const [cls, dot, lbl] = map[s] || map.available;
+    return `<span class="badge-status ${cls}" style="font-size:11px;"><span class="dot ${dot}"></span>${lbl}</span>`;
+  };
+  const driverDetail = (d) => {
+    if (!d) return '';
+    const ds = state.driverStatus[d.id];
+    if (!ds) return '';
+    // Show extra context for certain statuses
+    if (ds.status === 'rest' && ds.lastDelivery) {
+      const availAt = getAvailableAfter(ds.lastDelivery);
+      const rem = availAt - new Date();
+      if (rem > 0) return `<div style="font-size:10px;color:var(--orange);margin-top:2px;">Avail: ${formatTimeShort(availAt)}</div>`;
+      return `<div style="font-size:10px;color:var(--green);margin-top:2px;">Rest complete</div>`;
+    }
+    if (ds.status === 'onload') {
+      const load = getActiveLoad(d.id);
+      if (load) return `<div style="font-size:10px;color:var(--yellow);margin-top:2px;">${load.pickupLoc||'?'} → ${load.deliveryLoc||'?'}</div>`;
+    }
+    if (ds.notes) return `<div style="font-size:10px;color:var(--text-dim);margin-top:2px;">${ds.notes}</div>`;
+    return '';
+  };
+
+  document.getElementById('truckGrid').innerHTML = entries.length ? `
+    <div class="table-wrap"><table>
+      <thead><tr>
+        <th style="width:80px;">Truck #</th>
+        ${currentCompany === 'all' ? '<th style="width:70px;">Co.</th>' : ''}
+        <th>Driver</th>
+        <th style="width:150px;">Driver Status</th>
+        <th style="width:130px;">Truck Status</th>
+        <th>Driver Notes</th>
+        <th>Truck Notes</th>
+      </tr></thead>
+      <tbody>${entries.map(([num, driver]) => {
+        const ts = state.truckStatus[num] || { status: 'active', notes: '' };
+        const ds = driver ? (state.driverStatus[driver.id] || {}) : {};
+        const coCol = currentCompany === 'all' ? `<td><span style="background:${(ts.company||'nature')==='nature'?'var(--green-bg)':'var(--blue-bg)'};color:${(ts.company||'nature')==='nature'?'var(--green)':'var(--blue)'};padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">${(ts.company||'nature')==='nature'?'ND':'YSA'}</span></td>` : '';
+        // Row highlight for issues
+        const rowStyle = ts.status === 'repair' ? 'background:rgba(231,76,60,0.04);' : (ds.status === 'waiting_on_truck' ? 'background:rgba(230,126,34,0.04);' : '');
+        return `<tr style="${rowStyle}">
+          <td><strong style="font-size:15px;">#${num}</strong></td>
+          ${coCol}
+          <td>
+            <div>${driver ? `<strong>${driver.name}</strong>` : '<em style="color:var(--text-dim)">Unassigned</em>'}</div>
+            ${driver ? driverDetail(driver) : ''}
+          </td>
+          <td style="cursor:${driver ? 'pointer' : 'default'};" ${driver ? `onclick="openDriverStatusFromFleet('${driver.id}')" title="Click to update driver status"` : ''}>
+            ${driverBadge(driver)}
+            ${driver ? '<div style="font-size:9px;color:var(--text-dim);margin-top:3px;cursor:pointer;">click to update</div>' : ''}
+          </td>
+          <td style="cursor:pointer;" onclick="openTruckStatusFromFleet('${num}')" title="Click to update truck status">
+            ${truckBadge(ts.status)}
+            <div style="font-size:9px;color:var(--text-dim);margin-top:3px;cursor:pointer;">click to update</div>
+          </td>
+          <td style="color:var(--text-dim);font-size:12px;">${ds.notes || '—'}</td>
+          <td style="color:var(--text-dim);font-size:12px;">${ts.notes || '—'}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>
+  ` : '<div style="color:var(--text-dim);padding:16px;">No trucks</div>';
+}
+
+function renderLoads() {
+  const loads = currentCompany === 'all' ? state.loads : state.loads.filter(l => l.company === currentCompany);
+
+  let filteredLoads = loads;
+  if (!showAllLoads) {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 14);
+    cutoff.setHours(0,0,0,0);
+    filteredLoads = loads.filter(l => {
+      if (!l.date) return true; // show loads without dates
+      const ld = new Date(l.date + 'T00:00:00');
+      return ld >= cutoff;
+    });
+  }
+  document.getElementById('loadHistoryToggle').textContent = showAllLoads ? 'Last 14 Days' : 'Show All';
+
+  // Show/hide company header based on view
+  const companyHeader = document.getElementById('companyHeader');
+  if (companyHeader) companyHeader.style.display = currentCompany === 'all' ? 'table-cell' : 'none';
+
+  const statusLabels = { pending: 'Pending', confirmed: 'Confirmed', intransit: 'In Transit', delivered: 'Delivered' };
+  const statusBadgeMap = { pending: 'badge-pending', confirmed: 'badge-confirmed', intransit: 'badge-intransit', delivered: 'badge-delivered' };
+  document.getElementById('loadsTable').innerHTML = filteredLoads.length
+    ? filteredLoads.map((l, i) => {
+        const realIdx = state.loads.indexOf(l);
+        const companyCol = currentCompany === 'all' ? `<td style="font-weight:600;font-size:11px;"><span style="background:${l.company==='nature'?'var(--green-bg)':'var(--blue-bg)'};color:${l.company==='nature'?'var(--green)':'var(--blue)'};padding:2px 8px;border-radius:4px;">${l.company==='nature'?'ND':'YSA'}</span></td>` : '';
+        return `<tr>
+        <td style="white-space:nowrap;">
+          ${l.pdfBase64 ? '<button class="btn btn-sm" onclick="downloadPdf('+realIdx+')" style="background:var(--red-bg);color:#e74c3c;border:1px solid rgba(231,76,60,0.3);margin-right:4px;" title="Download Rate Con PDF">PDF</button>' : ''}
+          <button class="btn btn-secondary btn-sm" onclick="editLoad(${realIdx})" title="Edit Load">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteLoad(${realIdx})" style="margin-left:2px;" title="Delete Load">×</button>
+        </td>
+        ${companyCol}
+        <td>${l.date || '—'}</td>
+        <td><strong>${l.loadId}</strong></td>
+        <td>${l.driverName || '<em style="color:var(--text-dim)">—</em>'}</td>
+        <td>${l.trailer || '—'}</td>
+        <td>${l.pickupLoc || '—'}${getLocIcon(l.pickupLoc, 'shipper')}</td>
+        <td>${l.pickupTime || '—'}</td>
+        <td>${l.arriveShipper || '—'}</td>
+        <td>${l.departShipper || '—'}</td>
+        <td>${l.deliveryLoc || '—'}${l.stopCount ? '' : getLocIcon(l.deliveryLoc, 'receiver')}</td>
+        <td>${l.stopCount ? '<span style="background:var(--orange-bg);color:var(--orange);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;cursor:help;" title="' + (l.stops||[]).map(s => (s.stop === 'final' ? 'Final' : 'Stop '+s.stop) + ': ' + s.name + ' (' + s.city + ', ' + s.state + ') ' + s.time).join('&#10;').replace(/"/g,'&quot;') + '">' + l.stopCount + '</span>' : (l.stopCount === 0 ? '—' : '<span style="color:var(--text-dim)">1</span>')}</td>
+        <td>${l.deliveryDate || '—'}</td>
+        <td>${l.deliveryTime || '—'}</td>
+        <td>${l.arrivalTime || '—'}</td>
+        <td>${l.departureTime || '—'}</td>
+        <td style="white-space:normal;max-width:180px;">${l.notes || '—'}</td>
+        <td>${l.rate ? '$'+l.rate : '—'}</td>
+        <td><span class="badge-status ${statusBadgeMap[l.status]||''}">${statusLabels[l.status]||l.status}</span></td>
+        <td style="text-align:center;"><input type="checkbox" ${l.trackingRequired?'checked':''} onchange="toggleTrackingField(${realIdx},'trackingRequired',this.checked)" title="Tracking Required"></td>
+        <td style="text-align:center;"><input type="checkbox" ${l.trackingConfirmed?'checked':''} onchange="toggleTrackingField(${realIdx},'trackingConfirmed',this.checked)" title="Tracking Confirmed" ${l.trackingRequired?'':'disabled'}></td>
+      </tr>`;
+
+      }).join('')
+    : '<tr><td colspan="20" style="text-align:center;color:var(--text-dim);padding:24px;">No loads yet</td></tr>';
+  document.getElementById('loadBadge').textContent = loads.length;
+}
+
+function renderManage() {
+  // Drivers table — filtered by current company (all for Total Fleet)
+  let rows = '';
+  let idx = 0;
+  const companiesToShow = currentCompany === 'all' ? Object.keys(state.companies) : [currentCompany];
+  for (const co of companiesToShow) {
+    const data = state.companies[co];
+    if (!data) continue;
+    for (const d of data.drivers) {
+      rows += `<tr>
+        <td>${++idx}</td>
+        <td><strong>${d.name}</strong></td>
+        <td>${d.truck}</td>
+        <td>${d.phone || '—'}</td>
+        <td>${data.name}</td>
+        <td class="actions-cell">
+          <button class="btn btn-secondary btn-sm" onclick="editDriver('${co}','${d.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="removeDriver('${co}','${d.id}')">Remove</button>
+        </td>
+      </tr>`;
+    }
+  }
+  document.getElementById('manageDriversTable').innerHTML = rows || '<tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:16px;">No drivers</td></tr>';
+
+  // Trucks table — filtered by current company
+  let trows = '';
+  const trucks = getCompanyTrucks();
+  for (const [num, driver] of Object.entries(trucks)) {
+    const ts = state.truckStatus[num] || { status: 'active', notes: '' };
+    const badgeCls = ts.status === 'repair' ? 'badge-repair' : ts.status === 'onboarding' ? 'badge-onboarding' : 'badge-active';
+    const dotCls = ts.status === 'repair' ? 'dot-red' : ts.status === 'onboarding' ? 'dot-purple' : 'dot-green';
+    const statusLabel = ts.status === 'repair' ? 'In Repair' : ts.status === 'onboarding' ? 'Onboarding' : 'Active';
+    trows += `<tr>
+      <td><strong>#${num}</strong></td>
+      <td>${driver ? driver.name : '<em style="color:var(--text-dim)">Unassigned</em>'}</td>
+      <td><span class="badge-status ${badgeCls}"><span class="dot ${dotCls}"></span>${statusLabel}</span></td>
+      <td>${ts.notes || '—'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="removeTruck('${num}')">Remove</button></td>
+    </tr>`;
+  }
+  document.getElementById('manageTrucksTable').innerHTML = trows || '<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:16px;">No trucks</td></tr>';
+}
+
+// ===== LOCATIONS (SHIPPERS & RECEIVERS) =====
+function renderLocations() {
+  const search = (document.getElementById('locationSearch')?.value || '').toLowerCase();
+  const locs = (state.locations || []).filter(loc => {
+    if (!search) return true;
+    return (loc.name||'').toLowerCase().includes(search)
+      || (loc.city||'').toLowerCase().includes(search)
+      || (loc.state||'').toLowerCase().includes(search)
+      || (loc.instructions||'').toLowerCase().includes(search);
+  });
+
+  let rows = '';
+  for (let i = 0; i < locs.length; i++) {
+    const loc = locs[i];
+    const realIdx = state.locations.indexOf(loc);
+    const typeLabel = loc.type === 'both' ? 'Both' : loc.type === 'receiver' ? 'Receiver' : 'Shipper';
+    const typeBg = loc.type === 'receiver' ? 'var(--blue-bg)' : loc.type === 'both' ? 'var(--orange-bg)' : 'var(--green-bg)';
+    const typeColor = loc.type === 'receiver' ? 'var(--blue)' : loc.type === 'both' ? 'var(--orange)' : 'var(--green)';
+    const dh = loc.dropHook === 'yes' ? '<span style="color:var(--green)">Yes</span>' : loc.dropHook === 'no' ? '<span style="color:var(--red)">No</span>' : '—';
+    const hours = loc.hours || loc.closes ? [loc.hours, loc.closes ? 'Closes: ' + loc.closes : ''].filter(Boolean).join(' · ') : '—';
+    const instrShort = loc.instructions ? (loc.instructions.length > 45 ? loc.instructions.slice(0,45) + '...' : loc.instructions) : '—';
+
+    rows += `<tr>
+      <td><span style="background:${typeBg};color:${typeColor};padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">${typeLabel}</span></td>
+      <td><strong>${loc.name || '—'}</strong>${loc.address ? '<br><span style="color:var(--text-dim);font-size:11px;">' + loc.address + '</span>' : ''}</td>
+      <td>${loc.city || ''}${loc.state ? ', ' + loc.state : ''}</td>
+      <td style="font-size:12px;white-space:nowrap;">${hours}</td>
+      <td style="text-align:center;">${dh}</td>
+      <td style="text-align:center;font-size:11px;"><span style="background:${loc.useDate==='delivery'?'var(--blue-bg)':'var(--green-bg)'};color:${loc.useDate==='delivery'?'var(--blue)':'var(--green)'};padding:2px 6px;border-radius:4px;font-weight:600;">${loc.useDate==='delivery'?'Delivery':'Pickup'}</span></td>
+      <td style="font-size:12px;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(loc.instructions||'').replace(/"/g,'&quot;')}">${instrShort}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-secondary btn-sm" onclick="editLocation(${realIdx})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="removeLocation(${realIdx})">Remove</button>
+      </td>
+    </tr>`;
+  }
+  document.getElementById('locationsTable').innerHTML = rows || '<tr><td colspan="8" style="text-align:center;color:var(--text-dim);padding:24px;">No locations saved yet. Add shippers and receivers to build your directory.</td></tr>';
+}
+
+function saveLocation() {
+  const idx = parseInt(document.getElementById('locEditIdx').value);
+  const loc = {
+    type: document.getElementById('locType').value,
+    name: document.getElementById('locName').value.trim(),
+    city: document.getElementById('locCity').value.trim(),
+    state: document.getElementById('locState').value.trim().toUpperCase(),
+    address: document.getElementById('locAddress').value.trim(),
+    phone: document.getElementById('locPhone').value.trim(),
+    hours: document.getElementById('locHours').value.trim(),
+    closes: document.getElementById('locCloses').value.trim(),
+    dropHook: document.getElementById('locDropHook').value,
+    waitTime: document.getElementById('locWaitTime').value.trim(),
+    instructions: document.getElementById('locInstructions').value.trim(),
+    notes: document.getElementById('locNotes').value.trim(),
+    useDate: document.getElementById('locUseDate').value || 'pickup',
+    updatedAt: new Date().toISOString()
+  };
+  if (!loc.name) { alert('Please enter a facility name.'); return; }
+  if (!state.locations) state.locations = [];
+  if (idx >= 0 && idx < state.locations.length) {
+    state.locations[idx] = loc;
+  } else {
+    loc.createdAt = new Date().toISOString();
+    state.locations.push(loc);
+  }
+  saveState(); closeModal('addLocation'); renderLocations();
+}
+
+function editLocation(idx) {
+  const loc = state.locations[idx];
+  if (!loc) return;
+  // Open modal first (which resets), then populate
+  openModal('addLocation');
+  // Now override with actual data
+  document.getElementById('locEditIdx').value = idx;
+  document.getElementById('locationModalTitle').textContent = 'Edit Location';
+  document.getElementById('locType').value = loc.type || 'shipper';
+  document.getElementById('locName').value = loc.name || '';
+  document.getElementById('locCity').value = loc.city || '';
+  document.getElementById('locState').value = loc.state || '';
+  document.getElementById('locAddress').value = loc.address || '';
+  document.getElementById('locPhone').value = loc.phone || '';
+  document.getElementById('locHours').value = loc.hours || '';
+  document.getElementById('locCloses').value = loc.closes || '';
+  document.getElementById('locDropHook').value = loc.dropHook || '';
+  document.getElementById('locWaitTime').value = loc.waitTime || '';
+  document.getElementById('locInstructions').value = loc.instructions || '';
+  document.getElementById('locNotes').value = loc.notes || '';
+  document.getElementById('locUseDate').value = loc.useDate || '';
+}
+
+function removeLocation(idx) {
+  const loc = state.locations[idx];
+  if (!loc || !confirm('Remove "' + loc.name + '" from the directory?')) return;
+  state.locations.splice(idx, 1);
+  saveState(); renderLocations();
+}
+
+function resetLocationModal() {
+  document.getElementById('locEditIdx').value = -1;
+  document.getElementById('locationModalTitle').textContent = 'Add Location';
+  ['locType','locName','locCity','locState','locAddress','locPhone','locHours','locCloses','locDropHook','locWaitTime','locInstructions','locNotes','locUseDate'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el.tagName === 'SELECT') el.selectedIndex = 0;
+    else el.value = '';
+  });
+}
+
+// Match a name from PDF to saved locations — fuzzy match on facility name
+function matchLocation(name) {
+  if (!name || !state.locations) return null;
+  const n = name.toUpperCase().replace(/[^A-Z0-9\s]/g, '').trim();
+  for (let i = 0; i < state.locations.length; i++) {
+    const locName = (state.locations[i].name || '').toUpperCase().replace(/[^A-Z0-9\s]/g, '').trim();
+    if (!locName) continue;
+    // Exact match
+    if (n === locName) return state.locations[i];
+    // One contains the other
+    if (n.includes(locName) || locName.includes(n)) return state.locations[i];
+    // Match on first significant word (skip INC, LLC, etc.)
+    const nWords = n.split(/\s+/).filter(w => !['INC','LLC','CO','CORP','LTD','MFG'].includes(w));
+    const lWords = locName.split(/\s+/).filter(w => !['INC','LLC','CO','CORP','LTD','MFG'].includes(w));
+    if (nWords[0] && lWords[0] && nWords[0] === lWords[0] && nWords.length > 0) return state.locations[i];
+  }
+  return null;
+}
+
+// Auto-create location entries from PDF data if not already in directory
+function autoSaveLocationFromPDF(data) {
+  if (!state.locations) state.locations = [];
+  // Check shipper
+  if (data.shipperName) {
+    const existing = matchLocation(data.shipperName);
+    if (!existing) {
+      state.locations.push({
+        type: 'shipper', name: data.shipperName,
+        city: data.pickupLoc ? data.pickupLoc.split(',')[0].trim() : '',
+        state: data.pickupLoc ? data.pickupLoc.split(',')[1]?.trim() : '',
+        address: '', phone: '', hours: '', closes: '', dropHook: '', waitTime: '',
+        instructions: '', notes: 'Auto-added from rate con', useDate: 'pickup',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+      });
+    }
+  }
+  // Check receiver(s) — for multi-stop, save all stops as receivers
+  if (data.allStopNames && data.allStopNames.length) {
+    for (const stop of data.allStopNames) {
+      if (!stop.name) continue;
+      const existing = matchLocation(stop.name);
+      if (!existing) {
+        state.locations.push({
+          type: 'receiver', name: stop.name,
+          city: stop.city || '', state: stop.state || '',
+          address: '', phone: '', hours: '', closes: '', dropHook: '', waitTime: '',
+          instructions: '', notes: 'Auto-added from rate con (multi-stop)', useDate: 'pickup',
+          createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+        });
+      }
+    }
+  } else if (data.receiverName) {
+    const existing = matchLocation(data.receiverName);
+    if (!existing) {
+      state.locations.push({
+        type: 'receiver', name: data.receiverName,
+        city: data.deliveryLoc ? data.deliveryLoc.split(',')[0].trim() : '',
+        state: data.deliveryLoc ? data.deliveryLoc.split(',')[1]?.trim() : '',
+        address: '', phone: '', hours: '', closes: '', dropHook: '', waitTime: '',
+        instructions: '', notes: 'Auto-added from rate con', useDate: 'pickup',
+        createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
+      });
+    }
+  }
+  saveState();
+}
+
+// Show a small info icon next to locations that have saved info
+function getLocIcon(locStr, type) {
+  if (!locStr || !state.locations) return '';
+  // Try to find a matching location by city
+  const city = locStr.split(',')[0].trim().toUpperCase();
+  const match = state.locations.find(loc => {
+    if (type === 'shipper' && loc.type === 'receiver') return false;
+    if (type === 'receiver' && loc.type === 'shipper') return false;
+    return (loc.city || '').toUpperCase() === city || (loc.name || '').toUpperCase().includes(city);
+  });
+  if (!match) return '';
+  let tip = match.name;
+  if (match.hours) tip += ' | Hours: ' + match.hours;
+  if (match.closes) tip += ' | Closes: ' + match.closes;
+  if (match.dropHook === 'yes') tip += ' | Drop & Hook';
+  if (match.dropHook === 'no') tip += ' | Live Load/Unload';
+  if (match.instructions) tip += ' | ' + match.instructions.slice(0, 80);
+  return ` <span title="${tip.replace(/"/g,'&quot;')}" style="cursor:help;color:var(--gold);font-size:13px;">&#9432;</span>`;
+}
+
+function renderAll() {
+  renderStats();
+  renderDashboard();
+  renderDrivers();
+  renderTrucks();
+  renderLoads();
+  renderManage();
+  renderLocations();
+  populateDriverSelects();
+}
+
+// ===== NAVIGATION =====
+function switchCompany(co) {
+  currentCompany = co;
+  document.querySelectorAll('.company-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.company-btn[onclick*="${co}"]`).classList.add('active');
+  const companyNameEl = document.getElementById('companyName');
+  if (companyNameEl) companyNameEl.textContent = co === 'all' ? 'Total Fleet' : (state.companies[co]?.name || co);
+  renderAll();
+}
+function switchPage(p) {
+  currentPage = p;
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+  document.querySelector(`.nav-tab[onclick*="${p}"]`)?.classList.add('active');
+  document.getElementById('page-' + p)?.classList.add('active');
+  renderAll();
+}
+
+// ===== MODALS =====
+function openModal(name) {
+  document.getElementById('modal-' + name)?.classList.add('show');
+  if (name === 'driverStatus') { populateDriverSelects(); prefillDriverModal(); calcRest(); }
+  if (name === 'truckStatus') populateTruckSelect();
+  if (name === 'newLoad') populateDriverSelects();
+  if (name === 'addDriver') document.getElementById('addDriverCompany').value = currentCompany === 'all' ? 'nature' : currentCompany;
+  if (name === 'addTruck') document.getElementById('addTruckCompany').value = currentCompany === 'all' ? 'nature' : currentCompany;
+  if (name === 'addLocation') resetLocationModal();
+}
+function closeModal(name) { document.getElementById('modal-' + name)?.classList.remove('show'); }
+
+function populateDriverSelects() {
+  // For submit form, use submitCompany; for others, use currentCompany
+  // For modals (driver status, new load), use currentCompany drivers (all if Total Fleet)
+  const modalDrivers = currentCompany === 'all' ? getAllDrivers() : getCompanyDrivers();
+  const modalOpts = modalDrivers.map(d => `<option value="${d.id}">${d.name} (Truck #${d.truck})</option>`).join('');
+  const un = '<option value="">— Unassigned —</option>';
+  ['modalDriver','modalLoadDriver'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = (id === 'modalDriver' ? '' : un) + modalOpts;
+  });
+  // For submit form, use submitCompany dropdown value
+  const submitCompanyEl = document.getElementById('submitCompany');
+  const submitCo = submitCompanyEl ? submitCompanyEl.value : (currentCompany === 'all' ? 'nature' : currentCompany);
+  const submitDrivers = (state.companies[submitCo] || { drivers: [] }).drivers;
+  const submitOpts = submitDrivers.map(d => `<option value="${d.id}">${d.name} (Truck #${d.truck})</option>`).join('');
+  const submitEl = document.getElementById('submitDriver');
+  if (submitEl) submitEl.innerHTML = un + submitOpts;
+}
+function populateTruckSelect() {
+  const drivers = getCompanyDrivers();
+  document.getElementById('modalTruck').innerHTML = drivers.map(d =>
+    `<option value="${d.truck}">Truck #${d.truck} (${d.name})</option>`
+  ).join('');
+}
+
+// Open driver status modal pre-selected from Fleet Status page
+function openDriverStatusFromFleet(driverId) {
+  openModal('driverStatus');
+  setTimeout(() => {
+    const sel = document.getElementById('modalDriver');
+    if (sel) { sel.value = driverId; prefillDriverModal(); }
+  }, 50);
+}
+
+// Open truck status modal pre-selected from Fleet Status page
+function openTruckStatusFromFleet(truckNum) {
+  openModal('truckStatus');
+  setTimeout(() => {
+    const sel = document.getElementById('modalTruck');
+    if (sel) {
+      sel.value = truckNum;
+      const ts = state.truckStatus[truckNum] || {};
+      document.getElementById('modalTruckStatus').value = ts.status || 'active';
+      document.getElementById('modalTruckNotes').value = ts.notes || '';
+    }
+  }, 50);
+}
+
+function prefillDriverModal() {
+  const did = document.getElementById('modalDriver').value;
+  const ds = state.driverStatus[did] || {};
+  document.getElementById('modalDriverStatus').value = ds.status || 'available';
+  document.getElementById('modalDriverNotes').value = ds.notes || '';
+  if (ds.lastDelivery) document.getElementById('modalDeliveryTime').value = ds.lastDelivery.slice(0, 16);
+  else document.getElementById('modalDeliveryTime').value = '';
+  calcRest();
+}
+
+function calcRest() {
+  const status = document.getElementById('modalDriverStatus').value;
+  const rg = document.getElementById('restGroup');
+  const rc = document.getElementById('restCalc');
+  if (status === 'rest') {
+    rg.style.display = '';
+    const dt = document.getElementById('modalDeliveryTime').value;
+    if (dt) {
+      const availAt = getAvailableAfter(dt);
+      const rem = availAt - new Date();
+      rc.textContent = rem > 0
+        ? `Available after: ${availAt.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true})} (${formatDuration(rem)} from now)`
+        : '10-hour rest completed. Consider setting to Available.';
+    } else rc.textContent = 'Enter delivery completion time to calculate.';
+  } else { rg.style.display = 'none'; rc.textContent = ''; }
+}
+
+// ===== SAVE ACTIONS =====
+function saveDriverStatus() {
+  const did = document.getElementById('modalDriver').value;
+  state.driverStatus[did] = {
+    status: document.getElementById('modalDriverStatus').value,
+    lastDelivery: document.getElementById('modalDeliveryTime').value || null,
+    notes: document.getElementById('modalDriverNotes').value
+  };
+  saveState(); closeModal('driverStatus'); renderAll();
+}
+function saveTruckStatus() {
+  const t = document.getElementById('modalTruck').value;
+  const existing = state.truckStatus[t] || {};
+  state.truckStatus[t] = { ...existing, status: document.getElementById('modalTruckStatus').value, notes: document.getElementById('modalTruckNotes').value };
+  saveState(); closeModal('truckStatus'); renderAll();
+}
+
+function saveNewLoad() {
+  const did = document.getElementById('modalLoadDriver').value;
+  const allDrivers = getAllDrivers();
+  const driver = allDrivers.find(d => d.id === did);
+  // Determine company from the selected driver, or fall back to currentCompany (never 'all')
+  const loadCompany = driver?.company || (currentCompany === 'all' ? 'nature' : currentCompany);
+  state.loads.push({
+    date: document.getElementById('modalLoadDate').value || '',
+    loadId: document.getElementById('modalLoadId').value || 'LD-'+Date.now().toString().slice(-6),
+    company: loadCompany, driverId: did||null, driverName: driver?driver.name:null,
+    trailer: document.getElementById('modalLoadTrailer').value,
+    pickupLoc: document.getElementById('modalPickupLoc').value,
+    pickupTime: document.getElementById('modalPickupTime').value || '',
+    arriveShipper: document.getElementById('modalArriveShipper').value || '',
+    departShipper: document.getElementById('modalDepartShipper').value || '',
+    deliveryLoc: document.getElementById('modalDeliveryLoc').value,
+    deliveryDate: document.getElementById('modalDeliveryDate').value || '',
+    deliveryTime: document.getElementById('modalDeliveryTime2').value || '',
+    arrivalTime: document.getElementById('modalArrivalTime').value || '',
+    departureTime: document.getElementById('modalDepartureTime').value || '',
+    rate: document.getElementById('modalRate').value,
+    notes: document.getElementById('modalLoadNotes').value,
+    stops: window._lastPdfData?.stops || null,
+    stopCount: window._lastPdfData?.stopCount || 0,
+    pdfBase64: window._lastPdfData?.pdfBase64 || null,
+    pdfFileName: window._lastPdfData?.pdfFileName || null,
+    trackingRequired: document.getElementById('modalTrackingRequired').checked,
+    trackingConfirmed: document.getElementById('modalTrackingConfirmed').checked,
+    status: 'pending', createdAt: new Date().toISOString()
+  });
+  window._lastPdfData = null;
+  saveState(); closeModal('newLoad'); renderAll();
+}
+function submitLoad() {
+  const selectedCompany = document.getElementById('submitCompany').value;
+  const companyDrivers = state.companies[selectedCompany]?.drivers || [];
+  const did = document.getElementById('submitDriver').value;
+  const driver = companyDrivers.find(d => d.id === did);
+  state.loads.push({
+    date: document.getElementById('submitDate').value || '',
+    loadId: document.getElementById('submitLoadId').value || 'LD-'+Date.now().toString().slice(-6),
+    company: selectedCompany, driverId: did||null, driverName: driver?driver.name:null,
+    trailer: document.getElementById('submitTrailer').value,
+    pickupLoc: document.getElementById('submitPickupLoc').value,
+    pickupTime: document.getElementById('submitPickupTime').value || '',
+    arriveShipper: document.getElementById('submitArriveShipper').value || '',
+    departShipper: document.getElementById('submitDepartShipper').value || '',
+    deliveryLoc: document.getElementById('submitDeliveryLoc').value,
+    deliveryDate: document.getElementById('submitDeliveryDate').value || '',
+    deliveryTime: document.getElementById('submitDeliveryTime').value || '',
+    arrivalTime: document.getElementById('submitArrivalTime').value || '',
+    departureTime: document.getElementById('submitDepartureTime').value || '',
+    rate: document.getElementById('submitRate').value,
+    notes: document.getElementById('submitNotes').value,
+    stops: window._lastPdfData?.stops || null,
+    stopCount: window._lastPdfData?.stopCount || 0,
+    pdfBase64: window._lastPdfData?.pdfBase64 || null,
+    pdfFileName: window._lastPdfData?.pdfFileName || null,
+    trackingRequired: document.getElementById('submitTrackingRequired').checked,
+    trackingConfirmed: document.getElementById('submitTrackingConfirmed').checked,
+    status: 'pending', createdAt: new Date().toISOString()
+  });
+  window._lastPdfData = null;
+  saveState();
+  ['submitDate','submitLoadId','submitTrailer','submitPickupLoc','submitPickupTime','submitArriveShipper','submitDepartShipper','submitDeliveryLoc','submitDeliveryDate','submitDeliveryTime','submitArrivalTime','submitDepartureTime','submitRate','submitNotes'].forEach(id => { const e=document.getElementById(id); if(e) e.value=''; });
+  document.getElementById('submitTrackingRequired').checked = false;
+  document.getElementById('submitTrackingConfirmed').checked = false;
+  alert('Load submitted!'); renderAll();
+}
+
+function updateLoadStatus(idx, val) {
+  if (idx >= 0 && state.loads[idx]) {
+    state.loads[idx].status = val;
+    saveState();
+    renderAll();
+  }
+}
+function toggleTrackingField(idx, field, val) {
+  if (idx >= 0 && state.loads[idx]) {
+    state.loads[idx][field] = val;
+    if (field === 'trackingRequired' && !val) state.loads[idx].trackingConfirmed = false;
+    saveState(); renderLoads();
+  }
+}
+function editLoad(idx) {
+  const l = state.loads[idx];
+  if (!l) return;
+  document.getElementById('editLoadIdx').value = idx;
+  document.getElementById('editLoadDate').value = l.date || '';
+  document.getElementById('editLoadId').value = l.loadId || '';
+  document.getElementById('editLoadTrailer').value = l.trailer || '';
+  document.getElementById('editPickupLoc').value = l.pickupLoc || '';
+  document.getElementById('editPickupTime').value = l.pickupTime || '';
+  document.getElementById('editArriveShipper').value = l.arriveShipper || '';
+  document.getElementById('editDepartShipper').value = l.departShipper || '';
+  document.getElementById('editDeliveryLoc').value = l.deliveryLoc || '';
+  document.getElementById('editDeliveryDate').value = l.deliveryDate || '';
+  document.getElementById('editDeliveryTime').value = l.deliveryTime || '';
+  document.getElementById('editArrivalTime').value = l.arrivalTime || '';
+  document.getElementById('editDepartureTime').value = l.departureTime || '';
+  document.getElementById('editRate').value = l.rate || '';
+  document.getElementById('editLoadStatus').value = l.status || 'pending';
+  document.getElementById('editTrackingRequired').checked = !!l.trackingRequired;
+  document.getElementById('editTrackingConfirmed').checked = !!l.trackingConfirmed;
+  document.getElementById('editLoadNotes').value = l.notes || '';
+  // Show PDF status
+  window._editPdfData = null;
+  const pdfStatusEl = document.getElementById('editPdfStatus');
+  if (l.pdfBase64) {
+    pdfStatusEl.innerHTML = '<span style="color:var(--green);">&#10003; PDF attached: ' + (l.pdfFileName || 'Rate Con') + '</span>';
+  } else {
+    pdfStatusEl.innerHTML = '<span style="color:var(--text-dim);">No PDF attached</span>';
+  }
+  // Populate driver select with current company drivers
+  const drivers = getCompanyDrivers();
+  const un = '<option value="">— Unassigned —</option>';
+  document.getElementById('editLoadDriver').innerHTML = un + drivers.map(d =>
+    `<option value="${d.id}" ${d.id === l.driverId ? 'selected' : ''}>${d.name} (Truck #${d.truck})</option>`
+  ).join('');
+  openModal('editLoad');
+}
+
+function saveEditLoad() {
+  const gi = parseInt(document.getElementById('editLoadIdx').value);
+  if (isNaN(gi) || !state.loads[gi]) return;
+  const did = document.getElementById('editLoadDriver').value;
+  const allDrivers = getAllDrivers();
+  const driver = allDrivers.find(d => d.id === did);
+  const l = state.loads[gi];
+  // Update company based on driver if reassigned, otherwise keep existing
+  if (driver?.company) l.company = driver.company;
+  l.date = document.getElementById('editLoadDate').value || '';
+  l.loadId = document.getElementById('editLoadId').value || l.loadId;
+  l.driverId = did || null;
+  l.driverName = driver ? driver.name : null;
+  l.trailer = document.getElementById('editLoadTrailer').value;
+  l.pickupLoc = document.getElementById('editPickupLoc').value;
+  l.pickupTime = document.getElementById('editPickupTime').value;
+  l.arriveShipper = document.getElementById('editArriveShipper').value;
+  l.departShipper = document.getElementById('editDepartShipper').value;
+  l.deliveryLoc = document.getElementById('editDeliveryLoc').value;
+  l.deliveryDate = document.getElementById('editDeliveryDate').value;
+  l.deliveryTime = document.getElementById('editDeliveryTime').value;
+  l.arrivalTime = document.getElementById('editArrivalTime').value;
+  l.departureTime = document.getElementById('editDepartureTime').value;
+  l.rate = document.getElementById('editRate').value;
+  l.status = document.getElementById('editLoadStatus').value;
+  l.trackingRequired = document.getElementById('editTrackingRequired').checked;
+  l.trackingConfirmed = document.getElementById('editTrackingConfirmed').checked;
+  l.notes = document.getElementById('editLoadNotes').value;
+  // Save new PDF if attached via edit
+  if (window._editPdfData) {
+    l.pdfBase64 = window._editPdfData.base64;
+    l.pdfFileName = window._editPdfData.fileName;
+    window._editPdfData = null;
+  }
+  saveState(); closeModal('editLoad'); renderAll();
+}
+
+// Temp storage for PDF attached via edit modal
+window._editPdfData = null;
+
+async function attachPdfToEdit(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const buf = await file.arrayBuffer();
+  const bytes = new Uint8Array(buf);
+  let binary = '';
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+  window._editPdfData = { base64: btoa(binary), fileName: file.name };
+  document.getElementById('editPdfStatus').innerHTML = '<span style="color:var(--green);">&#10003; ' + file.name + ' attached</span>';
+  event.target.value = '';
+}
+
+function downloadPdf(idx) {
+  const load = state.loads[idx];
+  if (!load || !load.pdfBase64) { alert('No PDF attached to this load.'); return; }
+  const binary = atob(load.pdfBase64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = load.pdfFileName || ('RateCon_' + load.loadId + '.pdf');
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function deleteLoad(idx) {
+  if (!confirm('Delete this load?')) return;
+  if (idx >= 0 && state.loads[idx]) {
+    state.loads.splice(idx, 1);
+    saveState();
+    renderAll();
+  }
+}
+
+// ===== ONBOARDING (Add/Edit/Remove) =====
+function addDriver() {
+  const name = document.getElementById('addDriverName').value.trim();
+  const truck = document.getElementById('addDriverTruck').value.trim();
+  const phone = document.getElementById('addDriverPhone').value.trim();
+  const co = document.getElementById('addDriverCompany').value;
+  if (!name) return alert('Driver name is required.');
+  const id = name.toLowerCase().replace(/\s+/g, '_') + '_' + Date.now().toString().slice(-4);
+  state.companies[co].drivers.push({ id, name, truck, phone });
+  state.driverStatus[id] = { status: 'available', lastDelivery: null, notes: '' };
+  if (truck) state.truckStatus[truck] = state.truckStatus[truck] || { status: 'active', notes: '' };
+  saveState(); closeModal('addDriver'); renderAll();
+  document.getElementById('addDriverName').value = '';
+  document.getElementById('addDriverTruck').value = '';
+  document.getElementById('addDriverPhone').value = '';
+}
+
+function editDriver(co, did) {
+  const driver = state.companies[co].drivers.find(d => d.id === did);
+  if (!driver) return;
+  document.getElementById('editDriverId').value = did;
+  document.getElementById('editDriverCompany').value = co;
+  document.getElementById('editDriverName').value = driver.name;
+  document.getElementById('editDriverTruck').value = driver.truck;
+  document.getElementById('editDriverPhone').value = driver.phone || '';
+  openModal('editDriver');
+}
+
+function saveEditDriver() {
+  const did = document.getElementById('editDriverId').value;
+  const co = document.getElementById('editDriverCompany').value;
+  const driver = state.companies[co].drivers.find(d => d.id === did);
+  if (!driver) return;
+  driver.name = document.getElementById('editDriverName').value.trim();
+  driver.truck = document.getElementById('editDriverTruck').value.trim();
+  driver.phone = document.getElementById('editDriverPhone').value.trim();
+  // Update any loads with this driver
+  state.loads.forEach(l => { if (l.driverId === did) l.driverName = driver.name; });
+  saveState(); closeModal('editDriver'); renderAll();
+}
+
+function removeDriver(co, did) {
+  const driver = state.companies[co].drivers.find(d => d.id === did);
+  if (!driver || !confirm(`Remove ${driver.name} from ${state.companies[co].name}?`)) return;
+  state.companies[co].drivers = state.companies[co].drivers.filter(d => d.id !== did);
+  delete state.driverStatus[did];
+  saveState(); renderAll();
+}
+
+function addTruck() {
+  const num = document.getElementById('addTruckNumber').value.trim();
+  if (!num) return alert('Truck number is required.');
+  state.truckStatus[num] = {
+    status: document.getElementById('addTruckStatus').value,
+    notes: document.getElementById('addTruckNotes').value.trim(),
+    company: document.getElementById('addTruckCompany').value
+  };
+  saveState(); closeModal('addTruck'); renderAll();
+  document.getElementById('addTruckNumber').value = '';
+  document.getElementById('addTruckNotes').value = '';
+}
+
+function removeTruck(num) {
+  if (!confirm(`Remove Truck #${num}?`)) return;
+  delete state.truckStatus[num];
+  saveState(); renderAll();
+}
+
+// ===== CLOCK =====
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleString('en-US', {
+    weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+  });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Refresh countdowns
+setInterval(() => { if (currentPage === 'dashboard' || currentPage === 'drivers') renderAll(); }, 30000);
+
+// ===== PDF RATE CON EXTRACTION =====
+// Using pdf.js from CDN
+let pdfjsLoaded = false;
+function loadPdfJs() {
+  if (pdfjsLoaded) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    s.onload = () => {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      pdfjsLoaded = true;
+      resolve();
+    };
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function extractTextFromPDF(file) {
+  await loadPdfJs();
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let fullText = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    // Build items with position and width
+    // BST PDFs render some digits (e.g. "1" in "$150") at offset Y positions,
+    // so pdf.js treats them as separate items. We fix this by:
+    // 1. Grouping items by Y with tolerance (items within 4px = same line)
+    // 2. Sorting by X within each line
+    // 3. Merging items that are touching (gap < 2px) without adding spaces
+    const items = content.items
+      .filter(item => item.str.length > 0)
+      .map(item => ({
+        str: item.str,
+        x: item.transform[4],
+        y: item.transform[5],
+        w: item.width || item.str.length * 5 // width from pdf.js, fallback estimate
+      }));
+    // Sort by Y descending (PDF Y goes bottom-up), then X ascending
+    items.sort((a, b) => b.y - a.y || a.x - b.x);
+    // Group into lines by Y-tolerance
+    const yTol = 4;
+    const lines = [];
+    let curLine = null;
+    for (const item of items) {
+      if (!curLine || Math.abs(curLine.y - item.y) > yTol) {
+        curLine = { y: item.y, items: [] };
+        lines.push(curLine);
+      }
+      curLine.items.push(item);
+    }
+    // Build text line by line
+    for (const line of lines) {
+      line.items.sort((a, b) => a.x - b.x);
+      let lineText = '';
+      for (let j = 0; j < line.items.length; j++) {
+        const item = line.items[j];
+        if (j > 0) {
+          const prev = line.items[j - 1];
+          const gap = item.x - (prev.x + prev.w);
+          // If items are touching or overlapping (gap < 2px), merge directly
+          // This reconnects split dollar amounts: $ + 1 + 50.00 → $150.00
+          // But keeps space between dates and times: 03/27/26 [2.5px gap] 13:00
+          lineText += (gap < 2) ? item.str : (' ' + item.str);
+        } else {
+          lineText += item.str;
+        }
+      }
+      fullText += lineText + '\n';
+    }
+  }
+  return fullText;
+}
+
+function parseRateCon(text) {
+  const data = {};
+  // Normalize whitespace
+  const t = text.replace(/\s+/g, ' ');
+
+  // Helper: strip street address and person names from a city match, keeping only city name
+  function cleanCity(raw) {
+    let city = raw.trim();
+    // Remove "NUMBER STREETNAME STREETTYPE" prefix if present
+    city = city.replace(/^.*?\b\d+\s+\w+\s+(?:DR|DRIVE|RD|ROAD|ST|STREET|AVE|AVENUE|BLVD|BOULEVARD|LN|LANE|CT|COURT|PL|PLACE|WAY|HWY|HIGHWAY|PKWY|PARKWAY|CIR|CIRCLE|TRL|TRAIL|LOOP)\b\s*/i, '').trim();
+    // Also strip if it starts with a bare street suffix pattern (e.g., "REFUGEE RD COLUMBUS")
+    city = city.replace(/^[A-Z\s]+?\b(?:DR|DRIVE|RD|ROAD|ST|STREET|AVE|AVENUE|BLVD|BOULEVARD|LN|LANE|CT|COURT|PL|PLACE|WAY|HWY|HIGHWAY|PKWY|PARKWAY|CIR|CIRCLE|TRL|TRAIL|LOOP)\b\s*/i, '').trim();
+    // Remove any leftover single-letter prefixes (e.g., "N COLUMBUS" from "Drv Load: N")
+    city = city.replace(/^[A-Z]\s+/, '').trim();
+    // Remove common non-city words that might precede city name
+    city = city.replace(/^(?:Appt|Set|With|Pieces|Drv|Load|Unload)\s*:?\s*[A-Z]?\s*/gi, '').trim();
+    // Remove person names (First Last pattern) that precede a city name
+    // Pattern: "Firstname Lastname CITYNAME" — if 3+ words, strip words that look like names (mixed case) before an all-caps city
+    const words = city.split(/\s+/);
+    if (words.length >= 3) {
+      // Find where the all-caps city portion starts
+      let cityStart = -1;
+      for (let i = 0; i < words.length; i++) {
+        if (words[i] === words[i].toUpperCase() && words[i].length > 1) { cityStart = i; break; }
+      }
+      if (cityStart > 0) city = words.slice(cityStart).join(' ');
+    }
+    // If still too long (>25 chars), take last 2 words as likely city
+    if (city.length > 25) {
+      city = words.slice(-2).join(' ');
+    }
+    return city || raw.trim();
+  }
+
+  // Helper: format time range or single time
+  function formatTimeRange(time1, time2) {
+    if (time1 && time2 && time1 !== time2) return time1 + ' - ' + time2;
+    return time1 || time2 || '';
+  }
+
+  // Load Ref # / PRO — number can appear before or after the label
+  let m = t.match(/Load\s*Ref\s*#?\s*:?\s*(\d{5,})/i);
+  if (m) data.loadId = m[1];
+  // Number BEFORE "Load Ref #" (BST format: "1091395 ... Load Ref #")
+  if (!data.loadId) { m = t.match(/(\d{6,})\s+(?:Phone|Fax|Load\s*Ref)/i); if (m) data.loadId = m[1]; }
+  if (!data.loadId) { m = t.match(/Ref\s*#?\s*:?\s*(\d{5,})/i); if (m) data.loadId = m[1]; }
+  if (!data.loadId) { m = t.match(/Load\s*#?\s*:?\s*(\d{5,})/i); if (m) data.loadId = m[1]; }
+
+  // Driver name — must be a real name (not "Driver Phone" or empty)
+  m = t.match(/Driver\s*:\s*([A-Z][A-Z\s]{2,30}?)(?:\s{2,}|Driver\s*Phone|Phone|Tractor|$)/i);
+  if (m) {
+    const dn = m[1].trim();
+    // Skip if it's just "Driver" (from "Driver: Driver Phone:") or other labels
+    if (dn && !dn.match(/^(?:Driver|Phone|Tractor|Trailer)$/i)) data.driverName = dn;
+  }
+
+  // Driver phone
+  m = t.match(/Driver\s*Phone\s*:?\s*\(?\d{3}\)?\s*[\-.]?\s*\d{3}\s*[\-.]?\s*\d{4}/i);
+  if (m) { const ph = m[0].match(/\(?\d{3}\)?\s*[\-.]?\s*\d{3}\s*[\-.]?\s*\d{4}/); if (ph) data.driverPhone = ph[0]; }
+
+  // Shipper location — find CITY, STATE ZIP near "Shipper"
+  const shipIdx = t.toUpperCase().indexOf('SHIPPER');
+  if (shipIdx >= 0) {
+    const after = t.substring(shipIdx, shipIdx + 400);
+    // Try tight match first: 1-3 ALL-CAPS words before ", ST ZIP"
+    let cs = after.match(/\b([A-Z][A-Z .'-]{1,30}),\s*([A-Z]{2})\s+\d{5}/);
+    if (!cs) cs = after.match(/([A-Z][A-Za-z\s]+),\s*([A-Z]{2})\s+\d{5}/);
+    if (cs) data.pickupLoc = cleanCity(cs[1]) + ', ' + cs[2];
+  }
+
+  // Pickup date/time — "P/U Date:" or "Pickup Date" with optional time range
+  m = t.match(/P\/?U\s*Date\s*:?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})\s*(\d{1,2}:\d{2})?\s*(?:to\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*(\d{1,2}:\d{2}))?/i);
+  if (m) {
+    data.date = m[1];
+    data.pickupTime = formatTimeRange(m[2], m[3]);
+  }
+  // Try "Pickup Date:" format
+  if (!data.date) {
+    m = t.match(/Pickup\s*Date\s*:?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})\s*(\d{1,2}:\d{2})?\s*(?:to\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*(\d{1,2}:\d{2}))?/i);
+    if (m) { data.date = m[1]; data.pickupTime = formatTimeRange(m[2], m[3]); }
+  }
+  // Fallback: "Pickup:" format
+  if (!data.date) {
+    m = t.match(/Pickup\s*:?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})/i);
+    if (m) data.date = m[1];
+  }
+  // Broadest fallback: find any date near "P/U" or "Pickup" or "Shipper"
+  if (!data.date) {
+    m = t.match(/(?:P\/?U|Pickup|Shipper)[^]*?(\d{1,2}\/\d{1,2}\/\d{2,4})\s*(\d{1,2}:\d{2})?\s*(?:to\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*(\d{1,2}:\d{2}))?/i);
+    if (m) { data.date = m[1]; data.pickupTime = formatTimeRange(m[2], m[3]); }
+  }
+
+  // Multi-stop detection — only if "Stop 1", "Stop 2", etc. exist (not just "Final" alone)
+  const hasNumberedStops = /Stop\s*\d+/i.test(t);
+  const stops = [];
+  if (hasNumberedStops) {
+    const stopRegex = /(?:Stop\s*(\d+)|Final)\s+([A-Z][A-Z\s&'.,-]+?)(?:\s+Del\s*Date|\s+\d+\s+[A-Z]|\s+PLANT)/gi;
+    let stopMatch;
+    while ((stopMatch = stopRegex.exec(t)) !== null) {
+      const stopNum = stopMatch[1] ? parseInt(stopMatch[1]) : 'final';
+      const facilityName = stopMatch[2].trim();
+      // Find city/state near this stop — prefer ALL-CAPS city match to avoid capturing person names
+      const afterStop = t.substring(stopMatch.index, stopMatch.index + 400);
+      let cs = afterStop.match(/\b([A-Z][A-Z .'-]{1,30}),\s*([A-Z]{2})\s+\d{4,5}/);
+      if (!cs) cs = afterStop.match(/([A-Z][A-Za-z\s]+),\s*([A-Z]{2})\s+\d{4,5}/);
+      const city = cs ? cleanCity(cs[1]) : '';
+      const st = cs ? cs[2] : '';
+      // Get del date/time for this stop
+      const dtm = afterStop.match(/Del\s*Date\s*:?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})\s*(\d{1,2}:\d{2})?\s*(?:to\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*(\d{1,2}:\d{2}))?/i);
+      stops.push({
+        stop: stopNum, name: facilityName, city, state: st,
+        date: dtm ? dtm[1] : '', time: dtm ? formatTimeRange(dtm[2], dtm[3]) : ''
+      });
+    }
+  }
+
+  // If we have numbered stops, this is a multi-stop load
+  if (stops.length > 1) {
+    data.stops = stops;
+    data.stopCount = stops.length;
+    // Collect unique states across all stops
+    const states = [...new Set(stops.map(s => s.state).filter(Boolean))];
+    data.deliveryStates = states.join(', ');
+    // Delivery location shows as "X stops / STATE(S)"
+    data.deliveryLoc = stops.length + ' stop' + (stops.length > 1 ? 's' : '') + ' / ' + (states.join(', ') || '—');
+    // Use the LAST stop (Final) for delivery date/time (that's when driver finishes)
+    const lastStop = stops[stops.length - 1];
+    if (lastStop.date) data.deliveryDate = lastStop.date;
+    if (lastStop.time) data.deliveryTime = lastStop.time;
+  } else {
+    // Single-stop delivery — "Final" or "Consignee" or "Delivery"
+    const delPatterns = ['Final', 'Consignee', 'Deliver(?:y)?\\s*(?:to)?'];
+    for (const pat of delPatterns) {
+      const delIdx = t.search(new RegExp(pat, 'i'));
+      if (delIdx >= 0) {
+        const after = t.substring(delIdx, delIdx + 400);
+        // Try tight match first: ALL-CAPS city words before ", ST ZIP"
+        let cs = after.match(/\b([A-Z][A-Z .'-]{1,30}),\s*([A-Z]{2})\s+\d{5}/);
+        if (!cs) cs = after.match(/([A-Z][A-Za-z\s]+),\s*([A-Z]{2})\s+\d{5}/);
+        if (cs) { data.deliveryLoc = cleanCity(cs[1]) + ', ' + cs[2]; break; }
+      }
+    }
+  }
+
+  // Delivery date/time — use what we already got from multi-stop, or parse separately
+  if (!data.deliveryDate) {
+    m = t.match(/Del\.?\s*Date\s*:?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})\s*(\d{1,2}:\d{2})?\s*(?:to\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*(\d{1,2}:\d{2}))?/i);
+    if (m) {
+      data.deliveryDate = m[1];
+      data.deliveryTime = formatTimeRange(m[2], m[3]);
+    }
+  }
+  if (!data.deliveryDate) {
+    m = t.match(/Delivery\s*(?:Date)?\s*:?\s*(\d{1,2}\/\d{1,2}\/\d{2,4})\s*(\d{1,2}:\d{2})?\s*(?:to\s*\d{1,2}\/\d{1,2}\/\d{2,4}\s*(\d{1,2}:\d{2}))?/i);
+    if (m) { data.deliveryDate = m[1]; data.deliveryTime = formatTimeRange(m[2], m[3]); }
+  }
+
+  // Rate — fix pdf.js text extraction artifact where dollar amounts get split
+  // e.g. "$150.00" becomes "$1 50.00" or "$2 75.00" — rejoin before parsing
+  const tRate = t.replace(/\$\s*(\d{1,2})\s+(\d{2,3})(\.\d{2})/g, (_, a, b, c) => '$' + a + b + c);
+
+  // Prefer Total over individual line items
+  m = tRate.match(/Total\s*\$\s*([\d,]+\.?\d*)/i);
+  if (m) data.rate = m[1].replace(',', '');
+  if (!data.rate) {
+    m = tRate.match(/(?:Line\s*Haul|Carrier)\s*(?:Pay)?\s*.*?\$\s*([\d,]+\.?\d*)/i);
+    if (m) data.rate = m[1].replace(',', '');
+  }
+  // Fallback: find all dollar amounts and use the max
+  const allAmounts = [...tRate.matchAll(/\$([\d,]+\.\d{2})/g)].map(x => parseFloat(x[1].replace(',','')));
+  const maxAmount = allAmounts.length ? Math.max(...allAmounts) : 0;
+  // Sanity check: if extracted rate is suspiciously low (pdf.js split), use max amount
+  if (!data.rate || (parseFloat(data.rate) < 50 && maxAmount >= 50)) {
+    data.rate = maxAmount > 0 ? maxAmount.toString() : data.rate;
+  }
+
+  // Broker name — from the header/company name at top
+  m = t.match(/^[^]*?((?:[A-Z][A-Z\s&'.]+){2,}(?:TRANSPORTATION|TRUCKING|LOGISTICS|FREIGHT|BROKERAGE|SERVICES|INC|LLC|CO|CORP))/i);
+  if (m) {
+    let broker = m[1].trim();
+    if (!broker.match(/NATURE\s*DISPATCH/i)) data.broker = broker;
+  }
+
+  // Pickup Number
+  m = t.match(/Pickup\s*(?:Number|#|No)\s*:?\s*([A-Z0-9\s]+?)(?:\s{2,}|Del|Final|$)/i);
+  if (m) data.pickupNumber = m[1].trim();
+
+  // Comments — gather Special Instructions (shipper & receiver), NOT Carrier Instructions
+  const specialInstr = [];
+  const siRegex = /Special\s*Instructions\s*:?\s*(.+?)(?=(?:Final|Consignee|Deliver|Carrier\s*Pay|Carrier\s*Instructions|Line\s*Haul|Total\s*\$|\*{3,}))/gi;
+  let sim;
+  while ((sim = siRegex.exec(t)) !== null) {
+    const instr = sim[1].trim().replace(/\s+/g, ' ');
+    if (instr.length > 3) specialInstr.push(instr);
+  }
+  if (specialInstr.length) data.comments = specialInstr.join(' | ');
+
+  // Also extract shipper & receiver names for location matching
+  if (shipIdx >= 0) {
+    const shipBlock = t.substring(shipIdx, shipIdx + 200);
+    const sn = shipBlock.match(/Shipper\s+([A-Z][A-Z\s&'.,-]+?)(?:\s+P\/?U|\s+\d+\s|\s{2,})/i);
+    if (sn) data.shipperName = sn[1].trim();
+  }
+  // For multi-stop loads, use the Final stop name as receiver; for single-stop, find it
+  if (data.stops && data.stops.length) {
+    const finalStop = data.stops.find(s => s.stop === 'final') || data.stops[data.stops.length - 1];
+    if (finalStop) data.receiverName = finalStop.name;
+    // Also store all stop names for location auto-save
+    data.allStopNames = data.stops.map(s => ({ name: s.name, city: s.city, state: s.state }));
+  } else {
+    const rcvPatterns = ['Final', 'Consignee', 'Deliver(?:y)?\\s*(?:to)?'];
+    for (const pat of rcvPatterns) {
+      const di = t.search(new RegExp(pat, 'i'));
+      if (di >= 0) {
+        const delBlock = t.substring(di, di + 200);
+        const rn = delBlock.match(/(?:Final|Consignee|Delivery\s*(?:to)?)\s+([A-Z][A-Z\s&'.,-]+?)(?:\s+Del|\s+\d+\s|\s{2,})/i);
+        if (rn) { data.receiverName = rn[1].trim(); break; }
+      }
+    }
+  }
+
+  return data;
+}
+
+// Convert date string like "03/26/26" to "2026-03-26" for date input
+function rateConDateToInput(dateStr) {
+  if (!dateStr) return '';
+  const parts = dateStr.split('/');
+  if (parts.length !== 3) return '';
+  let [mo, day, yr] = parts;
+  if (yr.length === 2) yr = '20' + yr;
+  return `${yr}-${mo.padStart(2,'0')}-${day.padStart(2,'0')}`;
+}
+
+// Match driver name from PDF to our driver list
+function matchDriver(name) {
+  if (!name) return '';
+  const n = name.toUpperCase();
+  const drivers = getAllDrivers();
+  // Try exact first-name match
+  for (const d of drivers) {
+    if (n.includes(d.name.toUpperCase())) return d.id;
+  }
+  // Try last name from driver data
+  for (const d of drivers) {
+    const parts = n.split(/\s+/);
+    if (parts.some(p => d.name.toUpperCase().startsWith(p.slice(0,3)))) return d.id;
+  }
+  return '';
+}
+
+// ===== DRAG & DROP + MULTI-PDF BATCH UPLOAD =====
+function setupDropZones() {
+  const submitDZ = document.getElementById('submitDropZone');
+  if (submitDZ) {
+    ['dragenter','dragover'].forEach(evt => submitDZ.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); submitDZ.classList.add('dragover'); }));
+    ['dragleave','drop'].forEach(evt => submitDZ.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); submitDZ.classList.remove('dragover'); }));
+    submitDZ.addEventListener('drop', e => {
+      const files = [...e.dataTransfer.files].filter(f => f.type === 'application/pdf');
+      if (files.length === 0) { alert('Please drop PDF files only.'); return; }
+      if (files.length === 1) {
+        // Single file — fill the form
+        processSinglePdf(files[0], 'submit');
+      } else {
+        // Multiple files — batch process
+        processBatchPdfs(files);
+      }
+    });
+  }
+
+  // Also allow drag-drop on the entire Load Board page
+  const loadPage = document.getElementById('page-loads');
+  if (loadPage) {
+    ['dragenter','dragover'].forEach(evt => loadPage.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); }));
+    loadPage.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation();
+      const files = [...e.dataTransfer.files].filter(f => f.type === 'application/pdf');
+      if (files.length === 0) return;
+      if (files.length === 1) {
+        processSinglePdf(files[0], 'board');
+      } else {
+        processBatchPdfs(files);
+      }
+    });
+  }
+}
+
+async function processSinglePdf(file, target) {
+  // Create a fake event-like object for the existing handler
+  const fakeEvent = { target: { files: [file] } };
+  await handleRateConUpload(fakeEvent, target || 'board');
+}
+
+async function processBatchPdfs(files) {
+  const queue = document.getElementById('batchQueue');
+  if (queue) { queue.style.display = 'flex'; queue.innerHTML = ''; }
+  const selectedCompany = document.getElementById('submitCompany')?.value || (currentCompany === 'all' ? 'nature' : currentCompany);
+
+  let processed = 0, failed = 0;
+  for (const file of files) {
+    // Show progress
+    if (queue) {
+      queue.innerHTML = files.map((f, i) => {
+        let statusText = '', statusColor = 'var(--text-dim)';
+        if (i < processed + failed) { statusText = '✓ Done'; statusColor = 'var(--green)'; }
+        else if (i === processed + failed) { statusText = 'Processing...'; statusColor = 'var(--yellow)'; }
+        else { statusText = 'Queued'; }
+        return `<div class="batch-item"><span class="batch-name">📄 ${f.name}</span><span class="batch-status" style="color:${statusColor};">${statusText}</span></div>`;
+      }).join('');
+    }
+
+    try {
+      const text = await extractTextFromPDF(file);
+      const data = parseRateCon(text);
+
+      // Store PDF as base64
+      const pdfBuffer = await file.arrayBuffer();
+      const pdfBytes = new Uint8Array(pdfBuffer);
+      let binary = '';
+      for (let i = 0; i < pdfBytes.length; i++) binary += String.fromCharCode(pdfBytes[i]);
+      data.pdfBase64 = btoa(binary);
+      data.pdfFileName = file.name;
+
+      // Auto-save locations
+      autoSaveLocationFromPDF(data);
+
+      // Check shipper date preference
+      const shipperLocForDate = matchLocation(data.shipperName);
+      const useDatePref = shipperLocForDate?.useDate || 'pickup';
+      if (useDatePref === 'delivery' && data.deliveryDate) {
+        data.workDate = data.deliveryDate;
+      } else {
+        data.workDate = data.date || data.deliveryDate || '';
+      }
+
+      // Match driver and determine company
+      const driverMatch = matchDriver(data.driverName);
+      const allDrivers = getAllDrivers();
+      const matchedDriver = allDrivers.find(d => d.id === driverMatch);
+      const loadCompany = matchedDriver?.company || selectedCompany;
+
+      // Create the load directly
+      state.loads.push({
+        date: data.workDate ? rateConDateToInput(data.workDate) : '',
+        loadId: data.loadId || 'LD-' + Date.now().toString().slice(-6),
+        company: loadCompany,
+        driverId: driverMatch || null,
+        driverName: matchedDriver?.name || null,
+        trailer: '',
+        pickupLoc: data.pickupLoc || '',
+        pickupTime: data.pickupTime || '',
+        arriveShipper: '', departShipper: '',
+        deliveryLoc: data.deliveryLoc || '',
+        deliveryDate: data.deliveryDate ? rateConDateToInput(data.deliveryDate) : '',
+        deliveryTime: data.deliveryTime || '',
+        arrivalTime: '', departureTime: '',
+        rate: data.rate || '',
+        notes: '',
+        stops: data.stops || null,
+        stopCount: data.stopCount || 0,
+        pdfBase64: data.pdfBase64,
+        pdfFileName: data.pdfFileName,
+        trackingRequired: false, trackingConfirmed: false,
+        status: 'pending', createdAt: new Date().toISOString()
+      });
+      processed++;
+    } catch (err) {
+      console.error('Batch PDF error:', err);
+      failed++;
+    }
+  }
+
+  saveState();
+  renderAll();
+
+  // Show results
+  if (queue) {
+    queue.innerHTML = `<div class="batch-item" style="border-color:var(--green);">
+      <span class="batch-name" style="color:var(--green);">✓ ${processed} load${processed !== 1 ? 's' : ''} created from ${files.length} PDFs</span>
+      ${failed ? `<span class="batch-status" style="color:var(--red);">${failed} failed</span>` : ''}
+    </div>`;
+    setTimeout(() => { queue.style.display = 'none'; }, 5000);
+  }
+}
+
+// Handle multi-file select from browse button
+async function handleMultiPdfUpload(event, target) {
+  const files = [...event.target.files].filter(f => f.type === 'application/pdf');
+  if (!files.length) return;
+  event.target.value = ''; // reset input
+  if (files.length === 1) {
+    processSinglePdf(files[0], target);
+  } else {
+    processBatchPdfs(files);
+  }
+}
+
+async function handleRateConUpload(event, target) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const statusId = target === 'submit' ? 'uploadStatus' : 'uploadStatusBoard';
+  const statusEl = document.getElementById(statusId);
+  if (statusEl) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'var(--yellow-bg)';
+    statusEl.style.color = 'var(--yellow)';
+    statusEl.textContent = 'Extracting data from ' + file.name + '...';
+  }
+
+  try {
+    const text = await extractTextFromPDF(file);
+    const data = parseRateCon(text);
+
+    // Store the original PDF as base64 for download later
+    const pdfBuffer = await file.arrayBuffer();
+    const pdfBytes = new Uint8Array(pdfBuffer);
+    let binary = '';
+    for (let i = 0; i < pdfBytes.length; i++) binary += String.fromCharCode(pdfBytes[i]);
+    data.pdfBase64 = btoa(binary);
+    data.pdfFileName = file.name;
+
+    // Store parsed data so save functions can grab stops info
+    window._lastPdfData = data;
+
+    // Auto-save shipper/receiver to directory if new
+    autoSaveLocationFromPDF(data);
+    renderLocations();
+
+    // Check shipper's "Use Date" preference to determine workDate
+    const shipperLocForDate = matchLocation(data.shipperName);
+    const useDatePref = shipperLocForDate?.useDate || 'pickup';
+    if (useDatePref === 'delivery' && data.deliveryDate) {
+      data.workDate = data.deliveryDate;
+    } else {
+      data.workDate = data.date || data.deliveryDate || '';
+    }
+
+    // Build location match info for status display
+    const shipperMatch = shipperLocForDate;
+    const receiverMatch = matchLocation(data.receiverName);
+    let locInfo = [];
+    if (shipperMatch) locInfo.push('Shipper: ' + shipperMatch.name + (shipperMatch.hours ? ' (' + shipperMatch.hours + ')' : '') + (shipperMatch.dropHook === 'yes' ? ' [D&H]' : ''));
+    if (receiverMatch) locInfo.push('Receiver: ' + receiverMatch.name + (receiverMatch.hours ? ' (' + receiverMatch.hours + ')' : '') + (receiverMatch.dropHook === 'yes' ? ' [D&H]' : ''));
+
+    // Show success
+    if (statusEl) {
+      statusEl.style.background = 'var(--green-bg)';
+      statusEl.style.color = 'var(--green)';
+      const fields = Object.keys(data).filter(k => data[k]);
+      let statusMsg = `Extracted ${fields.length} fields from ${file.name}`;
+      if (useDatePref === 'delivery' && data.deliveryDate) statusMsg += ' | Using DELIVERY date (' + data.deliveryDate + ') per shipper config';
+      if (locInfo.length) statusMsg += ' | ' + locInfo.join(' | ');
+      statusEl.innerHTML = statusMsg;
+      setTimeout(() => { statusEl.style.display = 'none'; }, 8000);
+    }
+
+    if (target === 'submit') {
+      // Fill the Submit Load form — use workDate for the load date (dashboard/availability key)
+      if (data.workDate) document.getElementById('submitDate').value = rateConDateToInput(data.workDate);
+      if (data.loadId) document.getElementById('submitLoadId').value = data.loadId;
+      if (data.pickupLoc) document.getElementById('submitPickupLoc').value = data.pickupLoc;
+      if (data.pickupTime) document.getElementById('submitPickupTime').value = data.pickupTime;
+      if (data.deliveryLoc) document.getElementById('submitDeliveryLoc').value = data.deliveryLoc;
+      if (data.deliveryDate) document.getElementById('submitDeliveryDate').value = rateConDateToInput(data.deliveryDate);
+      if (data.deliveryTime) document.getElementById('submitDeliveryTime').value = data.deliveryTime;
+      if (data.rate) document.getElementById('submitRate').value = data.rate;
+      // Comments come from Shippers & Receivers directory, not PDF
+      const shipLoc = matchLocation(data.shipperName);
+      const rcvLoc = matchLocation(data.receiverName);
+      const locComments = [shipLoc?.instructions, rcvLoc?.instructions].filter(Boolean).join(' | ');
+      if (locComments) document.getElementById('submitNotes').value = locComments;
+      // Match driver
+      const did = matchDriver(data.driverName);
+      if (did) document.getElementById('submitDriver').value = did;
+    } else {
+      // Open the New Load modal and fill it
+      openModal('newLoad');
+      setTimeout(() => {
+        // Use workDate for the load date (dashboard/availability key)
+        if (data.workDate) document.getElementById('modalLoadDate').value = rateConDateToInput(data.workDate);
+        if (data.loadId) document.getElementById('modalLoadId').value = data.loadId;
+        if (data.pickupLoc) document.getElementById('modalPickupLoc').value = data.pickupLoc;
+        if (data.pickupTime) document.getElementById('modalPickupTime').value = data.pickupTime;
+        if (data.deliveryLoc) document.getElementById('modalDeliveryLoc').value = data.deliveryLoc;
+        if (data.deliveryDate) document.getElementById('modalDeliveryDate').value = rateConDateToInput(data.deliveryDate);
+        if (data.deliveryTime) document.getElementById('modalDeliveryTime2').value = data.deliveryTime;
+        if (data.rate) document.getElementById('modalRate').value = data.rate;
+        // Comments come from Shippers & Receivers directory, not PDF
+        const shipLoc2 = matchLocation(data.shipperName);
+        const rcvLoc2 = matchLocation(data.receiverName);
+        const locComments2 = [shipLoc2?.instructions, rcvLoc2?.instructions].filter(Boolean).join(' | ');
+        if (locComments2) document.getElementById('modalLoadNotes').value = locComments2;
+        // Match driver
+        const did = matchDriver(data.driverName);
+        if (did) document.getElementById('modalLoadDriver').value = did;
+      }, 100);
+    }
+
+  } catch(err) {
+    if (statusEl) {
+      statusEl.style.background = 'var(--red-bg)';
+      statusEl.style.color = 'var(--red)';
+      statusEl.textContent = 'Error extracting PDF: ' + err.message;
+    }
+  }
+
+  // Reset file input so same file can be re-uploaded
+  event.target.value = '';
+}
+
+// ===== GMAIL INTEGRATION =====
+const GMAIL_SENDER_FILTER = 'asheffield@bsttrucking.com';
+const GMAIL_SCOPES = 'https://www.googleapis.com/auth/gmail.readonly';
+let gmailAccessToken = null;
+let gmailTokenClient = null;
+let gmailProcessedIds = JSON.parse(localStorage.getItem('nd_gmail_processed') || '[]');
+
+function saveGmailClientId(val) {
+  localStorage.setItem('nd_gmail_client_id', val.trim());
+}
+
+function getGmailClientId() {
+  return (localStorage.getItem('nd_gmail_client_id') || '').trim();
+}
+
+function initGmailUI() {
+  const DEFAULT_CLIENT_ID = '309284541968-njq9tpmr5tvm2gusff45c29d7ehofmbe.apps.googleusercontent.com';
+  let clientId = getGmailClientId();
+  // Auto-save the default Client ID if none is stored
+  if (!clientId && DEFAULT_CLIENT_ID) {
+    saveGmailClientId(DEFAULT_CLIENT_ID);
+    clientId = DEFAULT_CLIENT_ID;
+  }
+  const cidInput = document.getElementById('gmailClientId');
+  if (cidInput && clientId) cidInput.value = clientId;
+
+  // If we have a token already from this session
+  updateGmailUI();
+}
+
+function updateGmailUI() {
+  const connected = !!gmailAccessToken;
+  const badge = document.getElementById('gmailStatusBadge');
+  const connectBtn = document.getElementById('gmailConnectBtn');
+  const checkBtn = document.getElementById('gmailCheckBtn');
+  const disconnectBtn = document.getElementById('gmailDisconnectBtn');
+  const setup = document.getElementById('gmailSetup');
+
+  if (badge) {
+    badge.textContent = connected ? 'Connected' : 'Not Connected';
+    badge.className = 'gmail-status ' + (connected ? 'connected' : 'disconnected');
+  }
+  if (connectBtn) connectBtn.style.display = connected ? 'none' : '';
+  if (checkBtn) checkBtn.style.display = connected ? '' : 'none';
+  if (disconnectBtn) disconnectBtn.style.display = connected ? '' : 'none';
+  if (setup) setup.style.display = connected ? 'none' : '';
+}
+
+function gmailConnect() {
+  const clientId = getGmailClientId();
+  if (!clientId) {
+    alert('Please paste your Google Client ID in the setup section first.');
+    const details = document.querySelector('#gmailSetup details');
+    if (details) details.open = true;
+    return;
+  }
+
+  if (typeof google === 'undefined' || !google.accounts) {
+    alert('Google Identity Services not loaded yet. Please wait a moment and try again.');
+    return;
+  }
+
+  try {
+    gmailTokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: clientId,
+      scope: GMAIL_SCOPES,
+      callback: (response) => {
+        if (response.error) {
+          console.error('Gmail OAuth error:', response);
+          alert('Gmail connection failed: ' + (response.error_description || response.error));
+          return;
+        }
+        gmailAccessToken = response.access_token;
+        updateGmailUI();
+        // Auto-check for emails right after connecting
+        gmailCheckEmails();
+      }
+    });
+    gmailTokenClient.requestAccessToken();
+  } catch (err) {
+    console.error('Gmail init error:', err);
+    alert('Error initializing Gmail connection: ' + err.message);
+  }
+}
+
+function gmailDisconnect() {
+  if (gmailAccessToken) {
+    google.accounts.oauth2.revoke(gmailAccessToken, () => {});
+  }
+  gmailAccessToken = null;
+  updateGmailUI();
+  const results = document.getElementById('gmailResults');
+  if (results) { results.style.display = 'none'; results.innerHTML = ''; }
+}
+
+async function gmailCheckEmails() {
+  if (!gmailAccessToken) { alert('Please connect Gmail first.'); return; }
+
+  const results = document.getElementById('gmailResults');
+  results.style.display = 'block';
+  results.innerHTML = '<div style="color:var(--yellow);font-size:13px;padding:10px;">Searching Gmail for rate con PDFs from ' + GMAIL_SENDER_FILTER + '...</div>';
+
+  try {
+    // Search for emails from the sender with attachments, last 30 days
+    const query = `from:${GMAIL_SENDER_FILTER} has:attachment filename:pdf newer_than:30d`;
+    const searchResp = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(query)}&maxResults=25`, {
+      headers: { 'Authorization': 'Bearer ' + gmailAccessToken }
+    });
+
+    if (searchResp.status === 401) {
+      gmailAccessToken = null;
+      updateGmailUI();
+      results.innerHTML = '<div style="color:var(--red);font-size:13px;padding:10px;">Session expired. Please reconnect Gmail.</div>';
+      return;
+    }
+
+    const searchData = await searchResp.json();
+    const messages = searchData.messages || [];
+
+    if (messages.length === 0) {
+      results.innerHTML = '<div style="color:var(--text-dim);font-size:13px;padding:10px;">No rate con emails found from ' + GMAIL_SENDER_FILTER + ' in the last 30 days.</div>';
+      return;
+    }
+
+    // Fetch details for each message
+    let emailItems = [];
+    for (const msg of messages) {
+      const msgResp = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${msg.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=Date`, {
+        headers: { 'Authorization': 'Bearer ' + gmailAccessToken }
+      });
+      const msgData = await msgResp.json();
+      const subject = (msgData.payload?.headers?.find(h => h.name === 'Subject')?.value) || 'No Subject';
+      const date = (msgData.payload?.headers?.find(h => h.name === 'Date')?.value) || '';
+      const dateShort = date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+      const alreadyProcessed = gmailProcessedIds.includes(msg.id);
+
+      emailItems.push({ id: msg.id, subject, dateShort, alreadyProcessed });
+    }
+
+    // Count new vs processed
+    const newCount = emailItems.filter(e => !e.alreadyProcessed).length;
+
+    let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-size:13px;color:var(--text);">Found <strong>${messages.length}</strong> email${messages.length!==1?'s':''} · <span style="color:var(--green);font-weight:600;">${newCount} new</span></div>
+      ${newCount > 0 ? '<button class="btn btn-primary btn-sm" onclick="gmailImportAll()" style="background:var(--green);border-color:var(--green);">Import All New (' + newCount + ')</button>' : ''}
+    </div>`;
+
+    for (const email of emailItems) {
+      html += `<div class="gmail-email-item" style="${email.alreadyProcessed ? 'opacity:0.5;' : ''}">
+        <div class="gmail-email-info">
+          <div class="gmail-email-subject">${email.subject}</div>
+          <div class="gmail-email-meta">${email.dateShort}${email.alreadyProcessed ? ' · <span style="color:var(--green);">Already imported</span>' : ''}</div>
+        </div>
+        <div class="gmail-email-actions">
+          ${email.alreadyProcessed
+            ? '<button class="btn btn-secondary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="gmailImportSingle(\'' + email.id + '\', true)">Re-import</button>'
+            : '<button class="btn btn-primary btn-sm" style="font-size:11px;padding:4px 10px;" onclick="gmailImportSingle(\'' + email.id + '\', false)">Import</button>'
+          }
+        </div>
+      </div>`;
+    }
+
+    results.innerHTML = html;
+
+    // Store email list for import-all
+    window._gmailEmails = emailItems;
+
+  } catch (err) {
+    console.error('Gmail check error:', err);
+    results.innerHTML = `<div style="color:var(--red);font-size:13px;padding:10px;">Error checking Gmail: ${err.message}</div>`;
+  }
+}
+
+async function gmailGetPdfAttachments(messageId) {
+  // Get full message to find PDF attachments
+  const msgResp = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageId}?format=full`, {
+    headers: { 'Authorization': 'Bearer ' + gmailAccessToken }
+  });
+  const msgData = await msgResp.json();
+
+  const pdfs = [];
+  const parts = msgData.payload?.parts || [];
+
+  // Recursively find PDF attachments
+  function findPdfs(partsList) {
+    for (const part of partsList) {
+      if (part.filename && part.filename.toLowerCase().endsWith('.pdf') && part.body?.attachmentId) {
+        pdfs.push({ filename: part.filename, attachmentId: part.body.attachmentId });
+      }
+      if (part.parts) findPdfs(part.parts);
+    }
+  }
+  findPdfs(parts);
+
+  // Also check top-level body
+  if (msgData.payload?.filename?.toLowerCase().endsWith('.pdf') && msgData.payload?.body?.attachmentId) {
+    pdfs.push({ filename: msgData.payload.filename, attachmentId: msgData.payload.body.attachmentId });
+  }
+
+  // Download each attachment
+  const results = [];
+  for (const pdf of pdfs) {
+    const attResp = await fetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${messageId}/attachments/${pdf.attachmentId}`, {
+      headers: { 'Authorization': 'Bearer ' + gmailAccessToken }
+    });
+    const attData = await attResp.json();
+    // Gmail returns base64url-encoded data
+    const base64 = attData.data.replace(/-/g, '+').replace(/_/g, '/');
+    results.push({ filename: pdf.filename, base64: base64 });
+  }
+
+  return results;
+}
+
+async function gmailImportSingle(messageId, isReimport) {
+  const results = document.getElementById('gmailResults');
+  const btn = event?.target;
+  if (btn) { btn.textContent = 'Importing...'; btn.disabled = true; }
+
+  try {
+    const pdfs = await gmailGetPdfAttachments(messageId);
+    if (pdfs.length === 0) {
+      if (btn) { btn.textContent = 'No PDF found'; btn.disabled = false; }
+      return;
+    }
+
+    let imported = 0;
+    for (const pdf of pdfs) {
+      // Convert base64 to Uint8Array for pdf.js
+      const binaryStr = atob(pdf.base64);
+      const bytes = new Uint8Array(binaryStr.length);
+      for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+      // Extract text using pdf.js
+      const text = await extractTextFromPDFBytes(bytes);
+      const data = parseRateCon(text);
+
+      // Store PDF base64
+      data.pdfBase64 = pdf.base64;
+      data.pdfFileName = pdf.filename;
+
+      // Auto-save locations
+      autoSaveLocationFromPDF(data);
+
+      // Check shipper date preference
+      const shipperLoc = matchLocation(data.shipperName);
+      const useDatePref = shipperLoc?.useDate || 'pickup';
+      if (useDatePref === 'delivery' && data.deliveryDate) {
+        data.workDate = data.deliveryDate;
+      } else {
+        data.workDate = data.date || data.deliveryDate || '';
+      }
+
+      // Match driver
+      const driverMatch = matchDriver(data.driverName);
+      const allDrivers = getAllDrivers();
+      const matchedDriver = allDrivers.find(d => d.id === driverMatch);
+      const selectedCompany = document.getElementById('submitCompany')?.value || (currentCompany === 'all' ? 'nature' : currentCompany);
+      const loadCompany = matchedDriver?.company || selectedCompany;
+
+      // Create load
+      state.loads.push({
+        date: data.workDate ? rateConDateToInput(data.workDate) : '',
+        loadId: data.loadId || 'LD-' + Date.now().toString().slice(-6),
+        company: loadCompany,
+        driverId: driverMatch || null,
+        driverName: matchedDriver?.name || null,
+        trailer: '',
+        pickupLoc: data.pickupLoc || '',
+        pickupTime: data.pickupTime || '',
+        arriveShipper: '', departShipper: '',
+        deliveryLoc: data.deliveryLoc || '',
+        deliveryDate: data.deliveryDate ? rateConDateToInput(data.deliveryDate) : '',
+        deliveryTime: data.deliveryTime || '',
+        arrivalTime: '', departureTime: '',
+        rate: data.rate || '',
+        notes: '',
+        stops: data.stops || null,
+        stopCount: data.stopCount || 0,
+        pdfBase64: data.pdfBase64,
+        pdfFileName: data.pdfFileName,
+        trackingRequired: false, trackingConfirmed: false,
+        status: 'pending', createdAt: new Date().toISOString(),
+        gmailSource: messageId
+      });
+      imported++;
+    }
+
+    saveState();
+    renderAll();
+
+    // Mark as processed
+    if (!gmailProcessedIds.includes(messageId)) {
+      gmailProcessedIds.push(messageId);
+      localStorage.setItem('nd_gmail_processed', JSON.stringify(gmailProcessedIds));
+    }
+
+    if (btn) { btn.textContent = `✓ ${imported} imported`; btn.style.background = 'var(--green)'; btn.style.borderColor = 'var(--green)'; }
+
+  } catch (err) {
+    console.error('Gmail import error:', err);
+    if (btn) { btn.textContent = 'Error'; btn.style.background = 'var(--red)'; btn.disabled = false; }
+  }
+}
+
+async function gmailImportAll() {
+  const emails = window._gmailEmails || [];
+  const newEmails = emails.filter(e => !e.alreadyProcessed);
+  if (newEmails.length === 0) return;
+
+  const results = document.getElementById('gmailResults');
+  const importAllBtn = results.querySelector('button[onclick="gmailImportAll()"]');
+  if (importAllBtn) { importAllBtn.textContent = 'Importing...'; importAllBtn.disabled = true; }
+
+  let successCount = 0, failCount = 0;
+  for (const email of newEmails) {
+    try {
+      const pdfs = await gmailGetPdfAttachments(email.id);
+      for (const pdf of pdfs) {
+        const binaryStr = atob(pdf.base64);
+        const bytes = new Uint8Array(binaryStr.length);
+        for (let i = 0; i < binaryStr.length; i++) bytes[i] = binaryStr.charCodeAt(i);
+
+        const text = await extractTextFromPDFBytes(bytes);
+        const data = parseRateCon(text);
+        data.pdfBase64 = pdf.base64;
+        data.pdfFileName = pdf.filename;
+
+        autoSaveLocationFromPDF(data);
+        const shipperLoc = matchLocation(data.shipperName);
+        const useDatePref = shipperLoc?.useDate || 'pickup';
+        data.workDate = (useDatePref === 'delivery' && data.deliveryDate) ? data.deliveryDate : (data.date || data.deliveryDate || '');
+
+        const driverMatch = matchDriver(data.driverName);
+        const allDrivers = getAllDrivers();
+        const matchedDriver = allDrivers.find(d => d.id === driverMatch);
+        const selectedCompany = document.getElementById('submitCompany')?.value || (currentCompany === 'all' ? 'nature' : currentCompany);
+
+        state.loads.push({
+          date: data.workDate ? rateConDateToInput(data.workDate) : '',
+          loadId: data.loadId || 'LD-' + Date.now().toString().slice(-6) + '-' + successCount,
+          company: matchedDriver?.company || selectedCompany,
+          driverId: driverMatch || null,
+          driverName: matchedDriver?.name || null,
+          trailer: '',
+          pickupLoc: data.pickupLoc || '',
+          pickupTime: data.pickupTime || '',
+          arriveShipper: '', departShipper: '',
+          deliveryLoc: data.deliveryLoc || '',
+          deliveryDate: data.deliveryDate ? rateConDateToInput(data.deliveryDate) : '',
+          deliveryTime: data.deliveryTime || '',
+          arrivalTime: '', departureTime: '',
+          rate: data.rate || '',
+          notes: '',
+          stops: data.stops || null,
+          stopCount: data.stopCount || 0,
+          pdfBase64: data.pdfBase64,
+          pdfFileName: data.pdfFileName,
+          trackingRequired: false, trackingConfirmed: false,
+          status: 'pending', createdAt: new Date().toISOString(),
+          gmailSource: email.id
+        });
+        successCount++;
+      }
+      // Mark processed
+      if (!gmailProcessedIds.includes(email.id)) {
+        gmailProcessedIds.push(email.id);
+      }
+    } catch (err) {
+      console.error('Gmail batch import error:', err);
+      failCount++;
+    }
+  }
+
+  localStorage.setItem('nd_gmail_processed', JSON.stringify(gmailProcessedIds));
+  saveState();
+  renderAll();
+
+  // Refresh the list
+  results.innerHTML = `<div style="background:var(--green-bg);color:var(--green);padding:12px 16px;border-radius:8px;font-size:14px;font-weight:600;margin-bottom:10px;">
+    ✓ Successfully imported ${successCount} load${successCount !== 1 ? 's' : ''} from Gmail${failCount > 0 ? ` (${failCount} failed)` : ''}
+  </div>`;
+  setTimeout(() => gmailCheckEmails(), 2000);
+}
+
+// Helper: extract text from PDF bytes (Uint8Array) — used by Gmail import
+async function extractTextFromPDFBytes(bytes) {
+  return new Promise((resolve, reject) => {
+    function tryExtract() {
+      if (typeof pdfjsLib === 'undefined') {
+        setTimeout(tryExtract, 200);
+        return;
+      }
+      pdfjsLib.getDocument({ data: bytes }).promise.then(pdf => {
+        let fullText = '';
+        let done = 0;
+        for (let i = 1; i <= pdf.numPages; i++) {
+          pdf.getPage(i).then(page => {
+            page.getTextContent().then(content => {
+              // Same Y-tolerance grouping logic as extractTextFromPDF
+              const items = content.items.filter(it => it.str.trim());
+              if (items.length === 0) { done++; if (done === pdf.numPages) resolve(fullText); return; }
+              const yTolerance = 3;
+              const lines = [];
+              let currentLine = { y: items[0].transform[5], items: [items[0]] };
+              for (let j = 1; j < items.length; j++) {
+                const item = items[j];
+                const y = item.transform[5];
+                if (Math.abs(y - currentLine.y) <= yTolerance) {
+                  currentLine.items.push(item);
+                } else {
+                  lines.push(currentLine);
+                  currentLine = { y, items: [item] };
+                }
+              }
+              lines.push(currentLine);
+              lines.sort((a, b) => b.y - a.y);
+              for (const line of lines) {
+                line.items.sort((a, b) => a.transform[4] - b.transform[4]);
+                let lineStr = '';
+                for (let k = 0; k < line.items.length; k++) {
+                  const it = line.items[k];
+                  if (k > 0) {
+                    const prev = line.items[k - 1];
+                    const gap = it.transform[4] - (prev.transform[4] + (prev.width || prev.str.length * 5));
+                    lineStr += gap > 8 ? '   ' : (gap > 2 ? ' ' : '');
+                  }
+                  lineStr += it.str;
+                }
+                fullText += lineStr + '\n';
+              }
+              done++;
+              if (done === pdf.numPages) resolve(fullText);
+            });
+          });
+        }
+      }).catch(reject);
+    }
+    tryExtract();
+  });
+}
+
+// Init
+renderAll();
+setupDropZones();
+initGmailUI();
+</script>
+</body>
+</html>
